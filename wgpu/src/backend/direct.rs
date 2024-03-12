@@ -769,13 +769,13 @@ impl crate::Context for Context {
         surface: &Self::SurfaceId,
         surface_data: &Self::SurfaceData,
         device: &Self::DeviceId,
-        _device_data: &Self::DeviceData,
+        device_data: &Self::DeviceData,
         config: &crate::SurfaceConfiguration,
     ) {
         let global = &self.0;
         let error = wgc::gfx_select!(device => global.surface_configure(*surface, *device, config));
-        if let Some(e) = error {
-            self.handle_error_fatal(e, "Surface::configure");
+        if let Some(cause) = error {
+            self.handle_error_nolabel(&device_data.error_sink, cause, "Surface::configure");
         } else {
             *surface_data.configured_device.lock() = Some(*device);
         }
