@@ -778,12 +778,12 @@ impl crate::Context for ContextWgpuCore {
         surface: &Self::SurfaceId,
         surface_data: &Self::SurfaceData,
         device: &Self::DeviceId,
-        _device_data: &Self::DeviceData,
+        device_data: &Self::DeviceData,
         config: &crate::SurfaceConfiguration,
     ) {
         let error = wgc::gfx_select!(device => self.0.surface_configure(*surface, *device, config));
         if let Some(e) = error {
-            self.handle_error_fatal(e, "Surface::configure");
+            self.handle_error_nolabel(&device_data.error_sink, e, "Surface::configure");
         } else {
             *surface_data.configured_device.lock() = Some(*device);
         }
