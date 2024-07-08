@@ -3,11 +3,7 @@ use super::conv;
 use ash::{extensions::khr, vk};
 use parking_lot::Mutex;
 
-use std::{
-    collections::BTreeMap,
-    ffi::CStr,
-    sync::{atomic::AtomicIsize, Arc},
-};
+use std::{collections::BTreeMap, ffi::CStr, sync::Arc};
 
 fn depth_stencil_required_flags() -> vk::FormatFeatureFlags {
     vk::FormatFeatureFlags::SAMPLED_IMAGE | vk::FormatFeatureFlags::DEPTH_STENCIL_ATTACHMENT
@@ -1485,9 +1481,6 @@ impl super::Instance {
                 }),
             image_format_list: phd_capabilities.device_api_version >= vk::API_VERSION_1_2
                 || phd_capabilities.supports_extension(vk::KhrImageFormatListFn::name()),
-            subgroup_size_control: phd_features
-                .subgroup_size_control
-                .map_or(false, |ext| ext.subgroup_size_control == vk::TRUE),
         };
         let capabilities = crate::Capabilities {
             limits: phd_capabilities.to_wgpu_limits(),
@@ -1792,25 +1785,20 @@ impl super::Adapter {
             vendor_id: self.phd_capabilities.properties.vendor_id,
             timestamp_period: self.phd_capabilities.properties.limits.timestamp_period,
             private_caps: self.private_caps.clone(),
+            features,
             workarounds: self.workarounds,
             render_passes: Mutex::new(Default::default()),
             framebuffers: Mutex::new(Default::default()),
         });
-        let mut relay_semaphores = [vk::Semaphore::null(); 2];
-        for sem in relay_semaphores.iter_mut() {
-            unsafe {
-                *sem = shared
-                    .raw
-                    .create_semaphore(&vk::SemaphoreCreateInfo::builder(), None)?
-            };
-        }
+
+        let relay_semaphores = super::RelaySemaphores::new(&shared)?;
+
         let queue = super::Queue {
             raw: raw_queue,
             swapchain_fn,
             device: Arc::clone(&shared),
             family_index,
-            relay_semaphores,
-            relay_index: AtomicIsize::new(-1),
+            relay_semaphores: Mutex::new(relay_semaphores),
         };
 
         let mem_allocator = {

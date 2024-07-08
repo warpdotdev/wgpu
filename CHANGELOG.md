@@ -37,7 +37,47 @@ Bottom level categories:
 - Hal
 -->
 
-## Unreleased
+## Unreleased 
+
+## v0.20.2 (2024-06-12)
+
+This release force-bumps transitive dependencies of `wgpu` on `wgpu-core` and `wgpu-hal` to 0.21.1, to resolve some undefined behavior observable in the DX12 backend after upgrading to Rust 1.79 or later.
+
+### Bug Fixes
+
+#### General
+
+* Fix a `CommandBuffer` leak. By @cwfitzgerald and @nical in [#5141](https://github.com/gfx-rs/wgpu/pull/5141)
+
+#### DX12
+
+* Do not feed `&""` to `D3DCompile`, by @workingjubilee in [#5812](https://github.com/gfx-rs/wgpu/issues/5812).
+
+## v0.20.1 (2024-06-12)
+
+This release included v0.21.0 of `wgpu-core` and `wgpu-hal`, due to breaking changes needed to solve vulkan validation issues.
+
+### Bug Fixes
+
+This release fixes the validation errors whenever a surface is used with the vulkan backend. By @cwfitzgerald in [#5681](https://github.com/gfx-rs/wgpu/pull/5681).
+
+#### General
+
+- Clean up weak references to texture views and bind groups to prevent memory leaks. By @xiaopengli89 in [#5595](https://github.com/gfx-rs/wgpu/pull/5595).
+- Fix segfault on exit is queue & device are dropped before surface. By @sagudev in [#5640](https://github.com/gfx-rs/wgpu/pull/5640).
+
+#### Metal
+
+- Fix unrecognized selector crash on iOS 12. By @vladasz in [#5744](https://github.com/gfx-rs/wgpu/pull/5744).
+
+#### Vulkan
+
+- Fix enablement of subgroup ops extension on Vulkan devices that don't support Vulkan 1.3. By @cwfitzgerald in [#5624](https://github.com/gfx-rs/wgpu/pull/5624).
+
+
+#### GLES / OpenGL
+
+-  Fix regression on OpenGL (EGL) where non-sRGB still used sRGB [#5642](https://github.com/gfx-rs/wgpu/pull/5642)
 
 ## v0.20.0 (2024-04-28)
 
