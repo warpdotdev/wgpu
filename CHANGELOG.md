@@ -64,6 +64,10 @@ Bottom level categories:
 
 ### Bug Fixes
 
+#### Naga
+
+- Fix crash when a texture argument is missing. By @aedm in [#6486](https://github.com/gfx-rs/wgpu/pull/6486)
+
 #### General
 
 - Ensure that `Features::TIMESTAMP_QUERY` is set when using timestamp writes in render and compute passes. By @ErichDonGubler in [#6497](https://github.com/gfx-rs/wgpu/pull/6497).
