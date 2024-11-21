@@ -1393,9 +1393,10 @@ impl Global {
 
             arc_desc.timestamp_writes = if let Some(tw) = desc.timestamp_writes {
                 let query_set = query_sets.get(tw.query_set).get()?;
-                query_set.same_device(device)?;
 
                 device.require_features(wgt::Features::TIMESTAMP_QUERY)?;
+
+                query_set.same_device(device)?;
 
                 Some(ArcPassTimestampWrites {
                     query_set,
