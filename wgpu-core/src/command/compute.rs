@@ -28,7 +28,9 @@ use crate::{
 use thiserror::Error;
 use wgt::{BufferAddress, DynamicOffset};
 
-use super::{bind::BinderError, memory_init::CommandBufferTextureMemoryActions};
+use super::{
+    bind::BinderError, memory_init::CommandBufferTextureMemoryActions, SimplifiedQueryType,
+};
 use crate::ray_tracing::TlasAction;
 use std::sync::Arc;
 use std::{fmt, mem::size_of, str};
@@ -309,6 +311,12 @@ impl Global {
         };
 
         arc_desc.timestamp_writes = if let Some(tw) = desc.timestamp_writes {
+            let &PassTimestampWrites {
+                query_set,
+                beginning_of_pass_write_index,
+                end_of_pass_write_index,
+            } = tw;
+
             match cmd_buf
                 .device
                 .require_features(wgt::Features::TIMESTAMP_QUERY)
@@ -317,7 +325,7 @@ impl Global {
                 Err(e) => return make_err(e.into(), arc_desc),
             }
 
-            let query_set = match hub.query_sets.get(tw.query_set).get() {
+            let query_set = match hub.query_sets.get(query_set).get() {
                 Ok(query_set) => query_set,
                 Err(e) => return make_err(e.into(), arc_desc),
             };
@@ -329,8 +337,8 @@ impl Global {
 
             Some(ArcPassTimestampWrites {
                 query_set,
-                beginning_of_pass_write_index: tw.beginning_of_pass_write_index,
-                end_of_pass_write_index: tw.end_of_pass_write_index,
+                beginning_of_pass_write_index,
+                end_of_pass_write_index,
             })
         } else {
             None

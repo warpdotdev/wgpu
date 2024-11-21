@@ -1392,7 +1392,13 @@ impl Global {
                 };
 
             arc_desc.timestamp_writes = if let Some(tw) = desc.timestamp_writes {
-                let query_set = query_sets.get(tw.query_set).get()?;
+                let &PassTimestampWrites {
+                    query_set,
+                    beginning_of_pass_write_index,
+                    end_of_pass_write_index,
+                } = tw;
+
+                let query_set = query_sets.get(query_set).get()?;
 
                 device.require_features(wgt::Features::TIMESTAMP_QUERY)?;
 
@@ -1400,8 +1406,8 @@ impl Global {
 
                 Some(ArcPassTimestampWrites {
                     query_set,
-                    beginning_of_pass_write_index: tw.beginning_of_pass_write_index,
-                    end_of_pass_write_index: tw.end_of_pass_write_index,
+                    beginning_of_pass_write_index,
+                    end_of_pass_write_index,
                 })
             } else {
                 None
