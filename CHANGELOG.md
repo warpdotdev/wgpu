@@ -135,6 +135,7 @@ By @ErichDonGubler in [#6456](https://github.com/gfx-rs/wgpu/pull/6456), [#6148]
   - Check the status of the `TIMESTAMP_QUERY` feature before other validation.
   - Check that indices are in-bounds for the query set.
   - Check that begin and end indices are not equal.
+- Reject destroyed buffers in query set resolution. By @ErichDonGubler in [#6579](https://github.com/gfx-rs/wgpu/pull/6579).
 
 #### Naga
 
