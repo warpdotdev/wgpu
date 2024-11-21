@@ -654,6 +654,10 @@ pub enum CommandEncoderError {
     InvalidResource(#[from] InvalidResourceError),
     #[error(transparent)]
     MissingFeatures(#[from] MissingFeatures),
+    #[error(
+        "begin and end indices of pass timestamp writes are both set to {idx}, which is not allowed"
+    )]
+    TimestampWriteIndicesEqual { idx: u32 },
     #[error(transparent)]
     TimestampWritesInvalid(#[from] QueryUseError),
 }

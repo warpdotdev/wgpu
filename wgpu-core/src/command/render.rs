@@ -1412,6 +1412,14 @@ impl Global {
                     query_set.validate_query(SimplifiedQueryType::Timestamp, idx, None)?;
                 }
 
+                if let Some((begin, end)) =
+                    beginning_of_pass_write_index.zip(end_of_pass_write_index)
+                {
+                    if begin == end {
+                        return Err(CommandEncoderError::TimestampWriteIndicesEqual { idx: begin });
+                    }
+                }
+
                 Some(ArcPassTimestampWrites {
                     query_set,
                     beginning_of_pass_write_index,

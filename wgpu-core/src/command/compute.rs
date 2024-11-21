@@ -345,6 +345,15 @@ impl Global {
                 }
             }
 
+            if let Some((begin, end)) = beginning_of_pass_write_index.zip(end_of_pass_write_index) {
+                if begin == end {
+                    return make_err(
+                        CommandEncoderError::TimestampWriteIndicesEqual { idx: begin },
+                        arc_desc,
+                    );
+                }
+            }
+
             Some(ArcPassTimestampWrites {
                 query_set,
                 beginning_of_pass_write_index,
