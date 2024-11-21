@@ -160,7 +160,7 @@ pub enum ResolveError {
 }
 
 impl QuerySet {
-    fn validate_query(
+    pub(crate) fn validate_query(
         self: &Arc<Self>,
         query_type: SimplifiedQueryType,
         query_index: u32,

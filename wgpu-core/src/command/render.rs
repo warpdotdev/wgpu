@@ -1,6 +1,7 @@
 use crate::binding_model::BindGroup;
 use crate::command::{
     validate_and_begin_occlusion_query, validate_and_begin_pipeline_statistics_query,
+    SimplifiedQueryType,
 };
 use crate::init_tracker::BufferInitTrackerAction;
 use crate::pipeline::RenderPipeline;
@@ -1403,6 +1404,13 @@ impl Global {
                 device.require_features(wgt::Features::TIMESTAMP_QUERY)?;
 
                 query_set.same_device(device)?;
+
+                for idx in [beginning_of_pass_write_index, end_of_pass_write_index]
+                    .into_iter()
+                    .flatten()
+                {
+                    query_set.validate_query(SimplifiedQueryType::Timestamp, idx, None)?;
+                }
 
                 Some(ArcPassTimestampWrites {
                     query_set,

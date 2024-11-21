@@ -654,6 +654,8 @@ pub enum CommandEncoderError {
     InvalidResource(#[from] InvalidResourceError),
     #[error(transparent)]
     MissingFeatures(#[from] MissingFeatures),
+    #[error(transparent)]
+    TimestampWritesInvalid(#[from] QueryUseError),
 }
 
 impl Global {

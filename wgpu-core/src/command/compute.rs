@@ -335,6 +335,16 @@ impl Global {
                 Err(e) => return make_err(e.into(), arc_desc),
             }
 
+            for idx in [beginning_of_pass_write_index, end_of_pass_write_index]
+                .into_iter()
+                .flatten()
+            {
+                match query_set.validate_query(SimplifiedQueryType::Timestamp, idx, None) {
+                    Ok(()) => (),
+                    Err(e) => return make_err(e.into(), arc_desc),
+                }
+            }
+
             Some(ArcPassTimestampWrites {
                 query_set,
                 beginning_of_pass_write_index,
