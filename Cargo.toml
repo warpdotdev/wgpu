@@ -136,7 +136,7 @@ winit = { version = "0.29", features = ["android-native-activity"] }
 # Metal dependencies
 block = "0.1"
 core-graphics-types = "0.1"
-metal = { version = "0.29.0" }
+metal = { version = "0.30.0" }
 objc = "0.2.5"
 
 # Vulkan dependencies
