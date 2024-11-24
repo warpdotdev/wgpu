@@ -112,6 +112,7 @@ By @ErichDonGubler in [#6456](https://github.com/gfx-rs/wgpu/pull/6456), [#6148]
 #### Naga
 
 - Show types of LHS and RHS in binary operation type mismatch errors. By @ErichDonGubler in [#6450](https://github.com/gfx-rs/wgpu/pull/6450).
+- The GLSL parser now uses less expressions for function calls. By @magcius in [#6604](https://github.com/gfx-rs/wgpu/pull/6604).
 
 #### General
 
