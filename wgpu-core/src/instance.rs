@@ -521,7 +521,7 @@ impl Adapter {
 
         let mut flags = wgt::TextureFormatFeatureFlags::empty();
         flags.set(
-            wgt::TextureFormatFeatureFlags::STORAGE_READ_WRITE,
+            wgt::TextureFormatFeatureFlags::STORAGE_WRITE,
             caps.contains(Tfc::STORAGE_READ_WRITE),
         );
 
