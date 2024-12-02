@@ -497,7 +497,9 @@ impl Device {
             self.require_downlevel_flags(wgt::DownlevelFlags::UNRESTRICTED_INDEX_BUFFER)?;
         }
 
-        if desc.usage.is_empty() || desc.usage.contains_invalid_bits() {
+        if desc.usage.is_empty()
+            || desc.usage | wgt::BufferUsages::all() != wgt::BufferUsages::all()
+        {
             return Err(resource::CreateBufferError::InvalidUsage(desc.usage));
         }
 
@@ -731,7 +733,9 @@ impl Device {
 
         self.check_is_valid()?;
 
-        if desc.usage.is_empty() || desc.usage.contains_invalid_bits() {
+        if desc.usage.is_empty()
+            || desc.usage | wgt::TextureUsages::all() != wgt::TextureUsages::all()
+        {
             return Err(CreateTextureError::InvalidUsage(desc.usage));
         }
 
@@ -1803,7 +1807,7 @@ impl Device {
                     })?;
             }
 
-            if entry.visibility.contains_invalid_bits() {
+            if entry.visibility | wgt::ShaderStages::all() != wgt::ShaderStages::all() {
                 return Err(
                     binding_model::CreateBindGroupLayoutError::InvalidVisibility(entry.visibility),
                 );
@@ -2968,7 +2972,7 @@ impl Device {
             if let Some(cs) = cs.as_ref() {
                 target_specified = true;
                 let error = 'error: {
-                    if cs.write_mask.contains_invalid_bits() {
+                    if cs.write_mask | wgt::ColorWrites::all() != wgt::ColorWrites::all() {
                         break 'error Some(pipeline::ColorStateError::InvalidWriteMask(
                             cs.write_mask,
                         ));
