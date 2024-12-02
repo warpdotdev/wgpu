@@ -26,153 +26,148 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 extern "C" {
-    # [wasm_bindgen (extends = :: js_sys :: Object , js_name = GPUPrimitiveState)]
+    # [wasm_bindgen (extends = :: js_sys :: Object , js_name = GPUCopyExternalImageDestInfo)]
     #[derive(Debug, Clone, PartialEq, Eq)]
-    #[doc = "The `GpuPrimitiveState` dictionary."]
+    #[doc = "The `GpuCopyExternalImageDestInfo` dictionary."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuPrimitiveState`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuCopyExternalImageDestInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    pub type GpuPrimitiveState;
+    pub type GpuCopyExternalImageDestInfo;
 
-    #[doc = "Get the `cullMode` field of this object."]
+    #[doc = "Get the `aspect` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuCullMode`, `GpuPrimitiveState`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuCopyExternalImageDestInfo`, `GpuTextureAspect`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, getter = "cullMode")]
-    pub fn get_cull_mode(this: &GpuPrimitiveState) -> Option<GpuCullMode>;
+    #[wasm_bindgen(method, getter = "aspect")]
+    pub fn get_aspect(this: &GpuCopyExternalImageDestInfo) -> Option<GpuTextureAspect>;
 
-    #[doc = "Change the `cullMode` field of this object."]
+    #[doc = "Change the `aspect` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuCullMode`, `GpuPrimitiveState`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuCopyExternalImageDestInfo`, `GpuTextureAspect`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, setter = "cullMode")]
-    pub fn set_cull_mode(this: &GpuPrimitiveState, val: GpuCullMode);
+    #[wasm_bindgen(method, setter = "aspect")]
+    pub fn set_aspect(this: &GpuCopyExternalImageDestInfo, val: GpuTextureAspect);
 
-    #[doc = "Get the `frontFace` field of this object."]
+    #[doc = "Get the `mipLevel` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuFrontFace`, `GpuPrimitiveState`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuCopyExternalImageDestInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, getter = "frontFace")]
-    pub fn get_front_face(this: &GpuPrimitiveState) -> Option<GpuFrontFace>;
+    #[wasm_bindgen(method, getter = "mipLevel")]
+    pub fn get_mip_level(this: &GpuCopyExternalImageDestInfo) -> Option<u32>;
 
-    #[doc = "Change the `frontFace` field of this object."]
+    #[doc = "Change the `mipLevel` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuFrontFace`, `GpuPrimitiveState`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuCopyExternalImageDestInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, setter = "frontFace")]
-    pub fn set_front_face(this: &GpuPrimitiveState, val: GpuFrontFace);
+    #[wasm_bindgen(method, setter = "mipLevel")]
+    pub fn set_mip_level(this: &GpuCopyExternalImageDestInfo, val: u32);
 
-    #[doc = "Get the `stripIndexFormat` field of this object."]
+    #[doc = "Get the `origin` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuIndexFormat`, `GpuPrimitiveState`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuCopyExternalImageDestInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, getter = "stripIndexFormat")]
-    pub fn get_strip_index_format(this: &GpuPrimitiveState) -> Option<GpuIndexFormat>;
+    #[wasm_bindgen(method, getter = "origin")]
+    pub fn get_origin(this: &GpuCopyExternalImageDestInfo) -> ::wasm_bindgen::JsValue;
 
-    #[doc = "Change the `stripIndexFormat` field of this object."]
+    #[doc = "Change the `origin` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuIndexFormat`, `GpuPrimitiveState`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuCopyExternalImageDestInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, setter = "stripIndexFormat")]
-    pub fn set_strip_index_format(this: &GpuPrimitiveState, val: GpuIndexFormat);
+    #[wasm_bindgen(method, setter = "origin")]
+    pub fn set_origin(this: &GpuCopyExternalImageDestInfo, val: &::wasm_bindgen::JsValue);
 
-    #[doc = "Get the `topology` field of this object."]
+    #[doc = "Get the `texture` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuPrimitiveState`, `GpuPrimitiveTopology`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuCopyExternalImageDestInfo`, `GpuTexture`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, getter = "topology")]
-    pub fn get_topology(this: &GpuPrimitiveState) -> Option<GpuPrimitiveTopology>;
+    #[wasm_bindgen(method, getter = "texture")]
+    pub fn get_texture(this: &GpuCopyExternalImageDestInfo) -> GpuTexture;
 
-    #[doc = "Change the `topology` field of this object."]
+    #[doc = "Change the `texture` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuPrimitiveState`, `GpuPrimitiveTopology`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuCopyExternalImageDestInfo`, `GpuTexture`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, setter = "topology")]
-    pub fn set_topology(this: &GpuPrimitiveState, val: GpuPrimitiveTopology);
+    #[wasm_bindgen(method, setter = "texture")]
+    pub fn set_texture(this: &GpuCopyExternalImageDestInfo, val: &GpuTexture);
 
-    #[doc = "Get the `unclippedDepth` field of this object."]
+    #[doc = "Get the `premultipliedAlpha` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuPrimitiveState`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuCopyExternalImageDestInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, getter = "unclippedDepth")]
-    pub fn get_unclipped_depth(this: &GpuPrimitiveState) -> Option<bool>;
+    #[wasm_bindgen(method, getter = "premultipliedAlpha")]
+    pub fn get_premultiplied_alpha(this: &GpuCopyExternalImageDestInfo) -> Option<bool>;
 
-    #[doc = "Change the `unclippedDepth` field of this object."]
+    #[doc = "Change the `premultipliedAlpha` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuPrimitiveState`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuCopyExternalImageDestInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, setter = "unclippedDepth")]
-    pub fn set_unclipped_depth(this: &GpuPrimitiveState, val: bool);
+    #[wasm_bindgen(method, setter = "premultipliedAlpha")]
+    pub fn set_premultiplied_alpha(this: &GpuCopyExternalImageDestInfo, val: bool);
 }
 
-impl GpuPrimitiveState {
-    #[doc = "Construct a new `GpuPrimitiveState`."]
+impl GpuCopyExternalImageDestInfo {
+    #[doc = "Construct a new `GpuCopyExternalImageDestInfo`."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuPrimitiveState`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuCopyExternalImageDestInfo`, `GpuTexture`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    pub fn new() -> Self {
+    pub fn new(texture: &GpuTexture) -> Self {
         #[allow(unused_mut)]
         let mut ret: Self = ::wasm_bindgen::JsCast::unchecked_into(::js_sys::Object::new());
+        ret.set_texture(texture);
         ret
     }
 
-    #[deprecated = "Use `set_cull_mode()` instead."]
-    pub fn cull_mode(&mut self, val: GpuCullMode) -> &mut Self {
-        self.set_cull_mode(val);
+    #[deprecated = "Use `set_aspect()` instead."]
+    pub fn aspect(&mut self, val: GpuTextureAspect) -> &mut Self {
+        self.set_aspect(val);
         self
     }
 
-    #[deprecated = "Use `set_front_face()` instead."]
-    pub fn front_face(&mut self, val: GpuFrontFace) -> &mut Self {
-        self.set_front_face(val);
+    #[deprecated = "Use `set_mip_level()` instead."]
+    pub fn mip_level(&mut self, val: u32) -> &mut Self {
+        self.set_mip_level(val);
         self
     }
 
-    #[deprecated = "Use `set_strip_index_format()` instead."]
-    pub fn strip_index_format(&mut self, val: GpuIndexFormat) -> &mut Self {
-        self.set_strip_index_format(val);
+    #[deprecated = "Use `set_origin()` instead."]
+    pub fn origin(&mut self, val: &::wasm_bindgen::JsValue) -> &mut Self {
+        self.set_origin(val);
         self
     }
 
-    #[deprecated = "Use `set_topology()` instead."]
-    pub fn topology(&mut self, val: GpuPrimitiveTopology) -> &mut Self {
-        self.set_topology(val);
+    #[deprecated = "Use `set_texture()` instead."]
+    pub fn texture(&mut self, val: &GpuTexture) -> &mut Self {
+        self.set_texture(val);
         self
     }
 
-    #[deprecated = "Use `set_unclipped_depth()` instead."]
-    pub fn unclipped_depth(&mut self, val: bool) -> &mut Self {
-        self.set_unclipped_depth(val);
+    #[deprecated = "Use `set_premultiplied_alpha()` instead."]
+    pub fn premultiplied_alpha(&mut self, val: bool) -> &mut Self {
+        self.set_premultiplied_alpha(val);
         self
-    }
-}
-
-impl Default for GpuPrimitiveState {
-    fn default() -> Self {
-        Self::new()
     }
 }

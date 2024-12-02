@@ -26,102 +26,105 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 extern "C" {
-    # [wasm_bindgen (extends = :: js_sys :: Object , js_name = GPUStorageTextureBindingLayout)]
+    # [wasm_bindgen (extends = :: js_sys :: Object , js_name = GPUTexelCopyBufferLayout)]
     #[derive(Debug, Clone, PartialEq, Eq)]
-    #[doc = "The `GpuStorageTextureBindingLayout` dictionary."]
+    #[doc = "The `GpuTexelCopyBufferLayout` dictionary."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuStorageTextureBindingLayout`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyBufferLayout`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    pub type GpuStorageTextureBindingLayout;
+    pub type GpuTexelCopyBufferLayout;
 
-    #[doc = "Get the `access` field of this object."]
+    #[doc = "Get the `bytesPerRow` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuStorageTextureAccess`, `GpuStorageTextureBindingLayout`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyBufferLayout`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, getter = "access")]
-    pub fn get_access(this: &GpuStorageTextureBindingLayout) -> Option<GpuStorageTextureAccess>;
+    #[wasm_bindgen(method, getter = "bytesPerRow")]
+    pub fn get_bytes_per_row(this: &GpuTexelCopyBufferLayout) -> Option<u32>;
 
-    #[doc = "Change the `access` field of this object."]
+    #[doc = "Change the `bytesPerRow` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuStorageTextureAccess`, `GpuStorageTextureBindingLayout`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyBufferLayout`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, setter = "access")]
-    pub fn set_access(this: &GpuStorageTextureBindingLayout, val: GpuStorageTextureAccess);
+    #[wasm_bindgen(method, setter = "bytesPerRow")]
+    pub fn set_bytes_per_row(this: &GpuTexelCopyBufferLayout, val: u32);
 
-    #[doc = "Get the `format` field of this object."]
+    #[doc = "Get the `offset` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuStorageTextureBindingLayout`, `GpuTextureFormat`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyBufferLayout`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, getter = "format")]
-    pub fn get_format(this: &GpuStorageTextureBindingLayout) -> GpuTextureFormat;
+    #[wasm_bindgen(method, getter = "offset")]
+    pub fn get_offset(this: &GpuTexelCopyBufferLayout) -> Option<f64>;
 
-    #[doc = "Change the `format` field of this object."]
+    #[doc = "Change the `offset` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuStorageTextureBindingLayout`, `GpuTextureFormat`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyBufferLayout`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, setter = "format")]
-    pub fn set_format(this: &GpuStorageTextureBindingLayout, val: GpuTextureFormat);
+    #[wasm_bindgen(method, setter = "offset")]
+    pub fn set_offset(this: &GpuTexelCopyBufferLayout, val: f64);
 
-    #[doc = "Get the `viewDimension` field of this object."]
+    #[doc = "Get the `rowsPerImage` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuStorageTextureBindingLayout`, `GpuTextureViewDimension`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyBufferLayout`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, getter = "viewDimension")]
-    pub fn get_view_dimension(
-        this: &GpuStorageTextureBindingLayout,
-    ) -> Option<GpuTextureViewDimension>;
+    #[wasm_bindgen(method, getter = "rowsPerImage")]
+    pub fn get_rows_per_image(this: &GpuTexelCopyBufferLayout) -> Option<u32>;
 
-    #[doc = "Change the `viewDimension` field of this object."]
+    #[doc = "Change the `rowsPerImage` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuStorageTextureBindingLayout`, `GpuTextureViewDimension`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyBufferLayout`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, setter = "viewDimension")]
-    pub fn set_view_dimension(this: &GpuStorageTextureBindingLayout, val: GpuTextureViewDimension);
+    #[wasm_bindgen(method, setter = "rowsPerImage")]
+    pub fn set_rows_per_image(this: &GpuTexelCopyBufferLayout, val: u32);
 }
 
-impl GpuStorageTextureBindingLayout {
-    #[doc = "Construct a new `GpuStorageTextureBindingLayout`."]
+impl GpuTexelCopyBufferLayout {
+    #[doc = "Construct a new `GpuTexelCopyBufferLayout`."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuStorageTextureBindingLayout`, `GpuTextureFormat`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyBufferLayout`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    pub fn new(format: GpuTextureFormat) -> Self {
+    pub fn new() -> Self {
         #[allow(unused_mut)]
         let mut ret: Self = ::wasm_bindgen::JsCast::unchecked_into(::js_sys::Object::new());
-        ret.set_format(format);
         ret
     }
 
-    #[deprecated = "Use `set_access()` instead."]
-    pub fn access(&mut self, val: GpuStorageTextureAccess) -> &mut Self {
-        self.set_access(val);
+    #[deprecated = "Use `set_bytes_per_row()` instead."]
+    pub fn bytes_per_row(&mut self, val: u32) -> &mut Self {
+        self.set_bytes_per_row(val);
         self
     }
 
-    #[deprecated = "Use `set_format()` instead."]
-    pub fn format(&mut self, val: GpuTextureFormat) -> &mut Self {
-        self.set_format(val);
+    #[deprecated = "Use `set_offset()` instead."]
+    pub fn offset(&mut self, val: f64) -> &mut Self {
+        self.set_offset(val);
         self
     }
 
-    #[deprecated = "Use `set_view_dimension()` instead."]
-    pub fn view_dimension(&mut self, val: GpuTextureViewDimension) -> &mut Self {
-        self.set_view_dimension(val);
+    #[deprecated = "Use `set_rows_per_image()` instead."]
+    pub fn rows_per_image(&mut self, val: u32) -> &mut Self {
+        self.set_rows_per_image(val);
         self
+    }
+}
+
+impl Default for GpuTexelCopyBufferLayout {
+    fn default() -> Self {
+        Self::new()
     }
 }

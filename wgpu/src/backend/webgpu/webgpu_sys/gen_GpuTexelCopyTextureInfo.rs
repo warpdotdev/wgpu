@@ -26,129 +26,124 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 extern "C" {
-    # [wasm_bindgen (extends = :: js_sys :: Object , js_name = GPURequestAdapterOptions)]
+    # [wasm_bindgen (extends = :: js_sys :: Object , js_name = GPUTexelCopyTextureInfo)]
     #[derive(Debug, Clone, PartialEq, Eq)]
-    #[doc = "The `GpuRequestAdapterOptions` dictionary."]
+    #[doc = "The `GpuTexelCopyTextureInfo` dictionary."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuRequestAdapterOptions`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyTextureInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    pub type GpuRequestAdapterOptions;
+    pub type GpuTexelCopyTextureInfo;
 
-    #[doc = "Get the `featureLevel` field of this object."]
+    #[doc = "Get the `aspect` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuRequestAdapterOptions`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyTextureInfo`, `GpuTextureAspect`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, getter = "featureLevel")]
-    pub fn get_feature_level(this: &GpuRequestAdapterOptions) -> Option<::alloc::string::String>;
+    #[wasm_bindgen(method, getter = "aspect")]
+    pub fn get_aspect(this: &GpuTexelCopyTextureInfo) -> Option<GpuTextureAspect>;
 
-    #[doc = "Change the `featureLevel` field of this object."]
+    #[doc = "Change the `aspect` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuRequestAdapterOptions`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyTextureInfo`, `GpuTextureAspect`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, setter = "featureLevel")]
-    pub fn set_feature_level(this: &GpuRequestAdapterOptions, val: &str);
+    #[wasm_bindgen(method, setter = "aspect")]
+    pub fn set_aspect(this: &GpuTexelCopyTextureInfo, val: GpuTextureAspect);
 
-    #[doc = "Get the `forceFallbackAdapter` field of this object."]
+    #[doc = "Get the `mipLevel` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuRequestAdapterOptions`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyTextureInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, getter = "forceFallbackAdapter")]
-    pub fn get_force_fallback_adapter(this: &GpuRequestAdapterOptions) -> Option<bool>;
+    #[wasm_bindgen(method, getter = "mipLevel")]
+    pub fn get_mip_level(this: &GpuTexelCopyTextureInfo) -> Option<u32>;
 
-    #[doc = "Change the `forceFallbackAdapter` field of this object."]
+    #[doc = "Change the `mipLevel` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuRequestAdapterOptions`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyTextureInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, setter = "forceFallbackAdapter")]
-    pub fn set_force_fallback_adapter(this: &GpuRequestAdapterOptions, val: bool);
+    #[wasm_bindgen(method, setter = "mipLevel")]
+    pub fn set_mip_level(this: &GpuTexelCopyTextureInfo, val: u32);
 
-    #[doc = "Get the `powerPreference` field of this object."]
+    #[doc = "Get the `origin` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuPowerPreference`, `GpuRequestAdapterOptions`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyTextureInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, getter = "powerPreference")]
-    pub fn get_power_preference(this: &GpuRequestAdapterOptions) -> Option<GpuPowerPreference>;
+    #[wasm_bindgen(method, getter = "origin")]
+    pub fn get_origin(this: &GpuTexelCopyTextureInfo) -> ::wasm_bindgen::JsValue;
 
-    #[doc = "Change the `powerPreference` field of this object."]
+    #[doc = "Change the `origin` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuPowerPreference`, `GpuRequestAdapterOptions`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyTextureInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, setter = "powerPreference")]
-    pub fn set_power_preference(this: &GpuRequestAdapterOptions, val: GpuPowerPreference);
+    #[wasm_bindgen(method, setter = "origin")]
+    pub fn set_origin(this: &GpuTexelCopyTextureInfo, val: &::wasm_bindgen::JsValue);
 
-    #[doc = "Get the `xrCompatible` field of this object."]
+    #[doc = "Get the `texture` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuRequestAdapterOptions`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyTextureInfo`, `GpuTexture`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, getter = "xrCompatible")]
-    pub fn get_xr_compatible(this: &GpuRequestAdapterOptions) -> Option<bool>;
+    #[wasm_bindgen(method, getter = "texture")]
+    pub fn get_texture(this: &GpuTexelCopyTextureInfo) -> GpuTexture;
 
-    #[doc = "Change the `xrCompatible` field of this object."]
+    #[doc = "Change the `texture` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuRequestAdapterOptions`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyTextureInfo`, `GpuTexture`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, setter = "xrCompatible")]
-    pub fn set_xr_compatible(this: &GpuRequestAdapterOptions, val: bool);
+    #[wasm_bindgen(method, setter = "texture")]
+    pub fn set_texture(this: &GpuTexelCopyTextureInfo, val: &GpuTexture);
 }
 
-impl GpuRequestAdapterOptions {
-    #[doc = "Construct a new `GpuRequestAdapterOptions`."]
+impl GpuTexelCopyTextureInfo {
+    #[doc = "Construct a new `GpuTexelCopyTextureInfo`."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuRequestAdapterOptions`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyTextureInfo`, `GpuTexture`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    pub fn new() -> Self {
+    pub fn new(texture: &GpuTexture) -> Self {
         #[allow(unused_mut)]
         let mut ret: Self = ::wasm_bindgen::JsCast::unchecked_into(::js_sys::Object::new());
+        ret.set_texture(texture);
         ret
     }
 
-    #[deprecated = "Use `set_feature_level()` instead."]
-    pub fn feature_level(&mut self, val: &str) -> &mut Self {
-        self.set_feature_level(val);
+    #[deprecated = "Use `set_aspect()` instead."]
+    pub fn aspect(&mut self, val: GpuTextureAspect) -> &mut Self {
+        self.set_aspect(val);
         self
     }
 
-    #[deprecated = "Use `set_force_fallback_adapter()` instead."]
-    pub fn force_fallback_adapter(&mut self, val: bool) -> &mut Self {
-        self.set_force_fallback_adapter(val);
+    #[deprecated = "Use `set_mip_level()` instead."]
+    pub fn mip_level(&mut self, val: u32) -> &mut Self {
+        self.set_mip_level(val);
         self
     }
 
-    #[deprecated = "Use `set_power_preference()` instead."]
-    pub fn power_preference(&mut self, val: GpuPowerPreference) -> &mut Self {
-        self.set_power_preference(val);
+    #[deprecated = "Use `set_origin()` instead."]
+    pub fn origin(&mut self, val: &::wasm_bindgen::JsValue) -> &mut Self {
+        self.set_origin(val);
         self
     }
 
-    #[deprecated = "Use `set_xr_compatible()` instead."]
-    pub fn xr_compatible(&mut self, val: bool) -> &mut Self {
-        self.set_xr_compatible(val);
+    #[deprecated = "Use `set_texture()` instead."]
+    pub fn texture(&mut self, val: &GpuTexture) -> &mut Self {
+        self.set_texture(val);
         self
-    }
-}
-
-impl Default for GpuRequestAdapterOptions {
-    fn default() -> Self {
-        Self::new()
     }
 }

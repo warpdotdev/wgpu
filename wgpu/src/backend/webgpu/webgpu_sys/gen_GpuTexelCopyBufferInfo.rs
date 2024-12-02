@@ -26,75 +26,93 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 extern "C" {
-    # [wasm_bindgen (extends = :: js_sys :: Object , js_name = GPUBufferBinding)]
+    # [wasm_bindgen (extends = :: js_sys :: Object , js_name = GPUTexelCopyBufferInfo)]
     #[derive(Debug, Clone, PartialEq, Eq)]
-    #[doc = "The `GpuBufferBinding` dictionary."]
+    #[doc = "The `GpuTexelCopyBufferInfo` dictionary."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuBufferBinding`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyBufferInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    pub type GpuBufferBinding;
+    pub type GpuTexelCopyBufferInfo;
 
-    #[doc = "Get the `buffer` field of this object."]
+    #[doc = "Get the `bytesPerRow` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuBuffer`, `GpuBufferBinding`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyBufferInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, getter = "buffer")]
-    pub fn get_buffer(this: &GpuBufferBinding) -> GpuBuffer;
+    #[wasm_bindgen(method, getter = "bytesPerRow")]
+    pub fn get_bytes_per_row(this: &GpuTexelCopyBufferInfo) -> Option<u32>;
 
-    #[doc = "Change the `buffer` field of this object."]
+    #[doc = "Change the `bytesPerRow` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuBuffer`, `GpuBufferBinding`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyBufferInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, setter = "buffer")]
-    pub fn set_buffer(this: &GpuBufferBinding, val: &GpuBuffer);
+    #[wasm_bindgen(method, setter = "bytesPerRow")]
+    pub fn set_bytes_per_row(this: &GpuTexelCopyBufferInfo, val: u32);
 
     #[doc = "Get the `offset` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuBufferBinding`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyBufferInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
     #[wasm_bindgen(method, getter = "offset")]
-    pub fn get_offset(this: &GpuBufferBinding) -> Option<f64>;
+    pub fn get_offset(this: &GpuTexelCopyBufferInfo) -> Option<f64>;
 
     #[doc = "Change the `offset` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuBufferBinding`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyBufferInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
     #[wasm_bindgen(method, setter = "offset")]
-    pub fn set_offset(this: &GpuBufferBinding, val: f64);
+    pub fn set_offset(this: &GpuTexelCopyBufferInfo, val: f64);
 
-    #[doc = "Get the `size` field of this object."]
+    #[doc = "Get the `rowsPerImage` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuBufferBinding`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyBufferInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, getter = "size")]
-    pub fn get_size(this: &GpuBufferBinding) -> Option<f64>;
+    #[wasm_bindgen(method, getter = "rowsPerImage")]
+    pub fn get_rows_per_image(this: &GpuTexelCopyBufferInfo) -> Option<u32>;
 
-    #[doc = "Change the `size` field of this object."]
+    #[doc = "Change the `rowsPerImage` field of this object."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuBufferBinding`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuTexelCopyBufferInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    #[wasm_bindgen(method, setter = "size")]
-    pub fn set_size(this: &GpuBufferBinding, val: f64);
+    #[wasm_bindgen(method, setter = "rowsPerImage")]
+    pub fn set_rows_per_image(this: &GpuTexelCopyBufferInfo, val: u32);
+
+    #[doc = "Get the `buffer` field of this object."]
+    #[doc = ""]
+    #[doc = "*This API requires the following crate features to be activated: `GpuBuffer`, `GpuTexelCopyBufferInfo`*"]
+    #[doc = ""]
+    #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
+    #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
+    #[wasm_bindgen(method, getter = "buffer")]
+    pub fn get_buffer(this: &GpuTexelCopyBufferInfo) -> GpuBuffer;
+
+    #[doc = "Change the `buffer` field of this object."]
+    #[doc = ""]
+    #[doc = "*This API requires the following crate features to be activated: `GpuBuffer`, `GpuTexelCopyBufferInfo`*"]
+    #[doc = ""]
+    #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
+    #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
+    #[wasm_bindgen(method, setter = "buffer")]
+    pub fn set_buffer(this: &GpuTexelCopyBufferInfo, val: &GpuBuffer);
 }
 
-impl GpuBufferBinding {
-    #[doc = "Construct a new `GpuBufferBinding`."]
+impl GpuTexelCopyBufferInfo {
+    #[doc = "Construct a new `GpuTexelCopyBufferInfo`."]
     #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuBuffer`, `GpuBufferBinding`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuBuffer`, `GpuTexelCopyBufferInfo`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
@@ -105,9 +123,9 @@ impl GpuBufferBinding {
         ret
     }
 
-    #[deprecated = "Use `set_buffer()` instead."]
-    pub fn buffer(&mut self, val: &GpuBuffer) -> &mut Self {
-        self.set_buffer(val);
+    #[deprecated = "Use `set_bytes_per_row()` instead."]
+    pub fn bytes_per_row(&mut self, val: u32) -> &mut Self {
+        self.set_bytes_per_row(val);
         self
     }
 
@@ -117,9 +135,15 @@ impl GpuBufferBinding {
         self
     }
 
-    #[deprecated = "Use `set_size()` instead."]
-    pub fn size(&mut self, val: f64) -> &mut Self {
-        self.set_size(val);
+    #[deprecated = "Use `set_rows_per_image()` instead."]
+    pub fn rows_per_image(&mut self, val: u32) -> &mut Self {
+        self.set_rows_per_image(val);
+        self
+    }
+
+    #[deprecated = "Use `set_buffer()` instead."]
+    pub fn buffer(&mut self, val: &GpuBuffer) -> &mut Self {
+        self.set_buffer(val);
         self
     }
 }

@@ -26,40 +26,57 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 extern "C" {
-    # [wasm_bindgen (extends = Event , extends = :: js_sys :: Object , js_name = GPUUncapturedErrorEvent , typescript_type = "GPUUncapturedErrorEvent")]
+    # [wasm_bindgen (extends = :: js_sys :: Object , js_name = GPUCanvasToneMapping)]
     #[derive(Debug, Clone, PartialEq, Eq)]
-    #[doc = "The `GpuUncapturedErrorEvent` class."]
+    #[doc = "The `GpuCanvasToneMapping` dictionary."]
     #[doc = ""]
-    #[doc = "[MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/GPUUncapturedErrorEvent)"]
-    #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuUncapturedErrorEvent`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuCanvasToneMapping`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    pub type GpuUncapturedErrorEvent;
+    pub type GpuCanvasToneMapping;
 
-    # [wasm_bindgen (structural , method , getter , js_class = "GPUUncapturedErrorEvent" , js_name = error)]
-    #[doc = "Getter for the `error` field of this object."]
+    #[doc = "Get the `mode` field of this object."]
     #[doc = ""]
-    #[doc = "[MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/GPUUncapturedErrorEvent/error)"]
-    #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuError`, `GpuUncapturedErrorEvent`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuCanvasToneMapping`, `GpuCanvasToneMappingMode`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    pub fn error(this: &GpuUncapturedErrorEvent) -> GpuError;
+    #[wasm_bindgen(method, getter = "mode")]
+    pub fn get_mode(this: &GpuCanvasToneMapping) -> Option<GpuCanvasToneMappingMode>;
 
-    #[wasm_bindgen(catch, constructor, js_class = "GPUUncapturedErrorEvent")]
-    #[doc = "The `new GpuUncapturedErrorEvent(..)` constructor, creating a new instance of `GpuUncapturedErrorEvent`."]
+    #[doc = "Change the `mode` field of this object."]
     #[doc = ""]
-    #[doc = "[MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/GPUUncapturedErrorEvent/GPUUncapturedErrorEvent)"]
-    #[doc = ""]
-    #[doc = "*This API requires the following crate features to be activated: `GpuUncapturedErrorEvent`, `GpuUncapturedErrorEventInit`*"]
+    #[doc = "*This API requires the following crate features to be activated: `GpuCanvasToneMapping`, `GpuCanvasToneMappingMode`*"]
     #[doc = ""]
     #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
     #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
-    pub fn new(
-        type_: &str,
-        gpu_uncaptured_error_event_init_dict: &GpuUncapturedErrorEventInit,
-    ) -> Result<GpuUncapturedErrorEvent, JsValue>;
+    #[wasm_bindgen(method, setter = "mode")]
+    pub fn set_mode(this: &GpuCanvasToneMapping, val: GpuCanvasToneMappingMode);
+}
+
+impl GpuCanvasToneMapping {
+    #[doc = "Construct a new `GpuCanvasToneMapping`."]
+    #[doc = ""]
+    #[doc = "*This API requires the following crate features to be activated: `GpuCanvasToneMapping`*"]
+    #[doc = ""]
+    #[doc = "*This API is unstable and requires `--cfg=web_sys_unstable_apis` to be activated, as"]
+    #[doc = "[described in the `wasm-bindgen` guide](https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html)*"]
+    pub fn new() -> Self {
+        #[allow(unused_mut)]
+        let mut ret: Self = ::wasm_bindgen::JsCast::unchecked_into(::js_sys::Object::new());
+        ret
+    }
+
+    #[deprecated = "Use `set_mode()` instead."]
+    pub fn mode(&mut self, val: GpuCanvasToneMappingMode) -> &mut Self {
+        self.set_mode(val);
+        self
+    }
+}
+
+impl Default for GpuCanvasToneMapping {
+    fn default() -> Self {
+        Self::new()
+    }
 }
