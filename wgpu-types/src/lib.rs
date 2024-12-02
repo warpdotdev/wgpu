@@ -7431,12 +7431,15 @@ pub enum Dx12Compiler {
     /// Minimum supported version: [v1.5.2010](https://github.com/microsoft/DirectXShaderCompiler/releases/tag/v1.5.2010)
     ///
     /// It also requires WDDM 2.1 (Windows 10 version 1607).
-    Dxc {
+    DynamicDxc {
         /// Path to the `dxil.dll` file, or path to the directory containing `dxil.dll` file. Passing `None` will use standard platform specific dll loading rules.
         dxil_path: Option<PathBuf>,
         /// Path to the `dxcompiler.dll` file, or path to the directory containing `dxcompiler.dll` file. Passing `None` will use standard platform specific dll loading rules.
         dxc_path: Option<PathBuf>,
     },
+    /// The statically-linked variant of Dxc.
+    /// The `static-dxc` feature is required to use this.
+    StaticDxc,
 }
 
 /// Selects which OpenGL ES 3 minor version to request.
