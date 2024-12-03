@@ -522,7 +522,16 @@ impl Device {
             self.require_downlevel_flags(wgt::DownlevelFlags::INDIRECT_EXECUTION)?;
             // We are going to be reading from it, internally;
             // when validating the content of the buffer
-            usage |= hal::BufferUses::STORAGE_READ | hal::BufferUses::STORAGE_READ_WRITE;
+            if !usage.intersects(
+                hal::BufferUses::STORAGE_READ_ONLY | hal::BufferUses::STORAGE_READ_WRITE,
+            ) {
+                if usage.contains(hal::BufferUses::STORAGE_WRITE_ONLY) {
+                    usage |= hal::BufferUses::STORAGE_READ_WRITE;
+                    usage &= !hal::BufferUses::STORAGE_WRITE_ONLY;
+                } else {
+                    usage |= hal::BufferUses::STORAGE_READ_ONLY;
+                }
+            }
         }
 
         if desc.mapped_at_creation {
@@ -1257,7 +1266,8 @@ impl Device {
                 }
                 TextureViewDimension::D3 => {
                     hal::TextureUses::RESOURCE
-                        | hal::TextureUses::STORAGE_READ
+                        | hal::TextureUses::STORAGE_READ_ONLY
+                        | hal::TextureUses::STORAGE_WRITE_ONLY
                         | hal::TextureUses::STORAGE_READ_WRITE
                 }
                 _ => hal::TextureUses::all(),
@@ -1919,7 +1929,7 @@ impl Device {
             wgt::BufferBindingType::Storage { read_only } => (
                 wgt::BufferUsages::STORAGE,
                 if read_only {
-                    hal::BufferUses::STORAGE_READ
+                    hal::BufferUses::STORAGE_READ_ONLY
                 } else {
                     hal::BufferUses::STORAGE_READ_WRITE
                 },
@@ -2492,24 +2502,31 @@ impl Device {
                 }
 
                 let internal_use = match access {
-                    wgt::StorageTextureAccess::WriteOnly => hal::TextureUses::STORAGE_READ_WRITE,
+                    wgt::StorageTextureAccess::WriteOnly => {
+                        if !view.format_features.flags.intersects(
+                            wgt::TextureFormatFeatureFlags::STORAGE_WRITE_ONLY
+                                | wgt::TextureFormatFeatureFlags::STORAGE_READ_WRITE,
+                        ) {
+                            return Err(Error::StorageWriteNotSupported(view.desc.format));
+                        }
+                        hal::TextureUses::STORAGE_WRITE_ONLY
+                    }
                     wgt::StorageTextureAccess::ReadOnly => {
-                        if !view
-                            .format_features
-                            .flags
-                            .contains(wgt::TextureFormatFeatureFlags::STORAGE_WRITE)
-                        {
+                        if !view.format_features.flags.intersects(
+                            wgt::TextureFormatFeatureFlags::STORAGE_READ_ONLY
+                                | wgt::TextureFormatFeatureFlags::STORAGE_READ_WRITE,
+                        ) {
                             return Err(Error::StorageReadNotSupported(view.desc.format));
                         }
-                        hal::TextureUses::STORAGE_READ
+                        hal::TextureUses::STORAGE_READ_ONLY
                     }
                     wgt::StorageTextureAccess::ReadWrite => {
                         if !view
                             .format_features
                             .flags
-                            .contains(wgt::TextureFormatFeatureFlags::STORAGE_WRITE)
+                            .contains(wgt::TextureFormatFeatureFlags::STORAGE_READ_WRITE)
                         {
-                            return Err(Error::StorageReadNotSupported(view.desc.format));
+                            return Err(Error::StorageReadWriteNotSupported(view.desc.format));
                         }
 
                         hal::TextureUses::STORAGE_READ_WRITE
