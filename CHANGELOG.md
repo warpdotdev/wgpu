@@ -50,7 +50,7 @@ By @cwfitzgerald in [#6619](https://github.com/gfx-rs/wgpu/pull/6619).
 
 ### Render and Compute Passes Now Properly Enforce Their Lifetime
 
-A regression intoduced in 23.0.0 caused lifetimes of render and compute passes to be incorrectly enforced. While this is not
+A regression introduced in 23.0.0 caused lifetimes of render and compute passes to be incorrectly enforced. While this is not
 a soundness issue, the intent is to move an error from runtime to compile time. This issue has been fixed and restored to the 22.0.0 behavior.
 
 ### The `diagnostic(…);` directive is now supported in WGSL
@@ -134,6 +134,7 @@ By @ErichDonGubler in [#6456](https://github.com/gfx-rs/wgpu/pull/6456), [#6148]
 - Make `Surface::as_hal` take an immutable reference to the surface. By @jerzywilczek in [#9999](https://github.com/gfx-rs/wgpu/pull/9999)
 - Add actual sample type to `CreateBindGroupError::InvalidTextureSampleType` error message. By @ErichDonGubler in [#6530](https://github.com/gfx-rs/wgpu/pull/6530).
 - Improve binding error to give a clearer message when there is a mismatch between resource binding as it is in the shader and as it is in the binding layout. By @eliemichel in [#6553](https://github.com/gfx-rs/wgpu/pull/6553).
+- `Surface::configure` and `Surface::get_current_texture` are no longer fatal. By @alokedesai in [#6253](https://github.com/gfx-rs/wgpu/pull/6253)
 
 #### D3D12
 
