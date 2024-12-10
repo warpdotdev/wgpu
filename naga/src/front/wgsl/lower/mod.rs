@@ -3056,24 +3056,67 @@ impl<'source, 'temp> Lowerer<'source, 'temp> {
         Ok(match size {
             ast::ArraySize::Constant(expr) => {
                 let span = ctx.ast_expressions.get_span(expr);
-                let const_expr = self.expression(expr, &mut ctx.as_const())?;
-                let len =
-                    ctx.module
-                        .to_ctx()
-                        .eval_expr_to_u32(const_expr)
-                        .map_err(|err| match err {
-                            crate::proc::U32EvalError::NonConst => {
-                                Error::ExpectedConstExprConcreteIntegerScalar(span)
+                let const_expr = self.expression(expr, &mut ctx.as_const());
+                match const_expr {
+                    Ok(value) => {
+                        let len =
+                            ctx.module.to_ctx().eval_expr_to_u32(value).map_err(
+                                |err| match err {
+                                    crate::proc::U32EvalError::NonConst => {
+                                        Error::ExpectedConstExprConcreteIntegerScalar(span)
+                                    }
+                                    crate::proc::U32EvalError::Negative => {
+                                        Error::ExpectedPositiveArrayLength(span)
+                                    }
+                                },
+                            )?;
+                        let size =
+                            NonZeroU32::new(len).ok_or(Error::ExpectedPositiveArrayLength(span))?;
+                        crate::ArraySize::Constant(size)
+                    }
+                    err => {
+                        if let Err(Error::ConstantEvaluatorError(ref ty, _)) = err {
+                            match **ty {
+                                crate::proc::ConstantEvaluatorError::OverrideExpr => {
+                                    crate::ArraySize::Pending(self.array_size_override(
+                                        expr,
+                                        &mut ctx.as_override(),
+                                        span,
+                                    )?)
+                                }
+                                _ => {
+                                    err?;
+                                    unreachable!()
+                                }
                             }
-                            crate::proc::U32EvalError::Negative => {
-                                Error::ExpectedPositiveArrayLength(span)
-                            }
-                        })?;
-                let size = NonZeroU32::new(len).ok_or(Error::ExpectedPositiveArrayLength(span))?;
-                crate::ArraySize::Constant(size)
+                        } else {
+                            err?;
+                            unreachable!()
+                        }
+                    }
+                }
             }
             ast::ArraySize::Dynamic => crate::ArraySize::Dynamic,
         })
+    }
+
+    fn array_size_override(
+        &mut self,
+        size_expr: Handle<ast::Expression<'source>>,
+        ctx: &mut ExpressionContext<'source, '_, '_>,
+        span: Span,
+    ) -> Result<crate::PendingArraySize, Error<'source>> {
+        let expr = self.expression(size_expr, ctx)?;
+        match resolve_inner!(ctx, expr).scalar_kind().ok_or(0) {
+            Ok(crate::ScalarKind::Sint) | Ok(crate::ScalarKind::Uint) => Ok({
+                if let crate::Expression::Override(handle) = ctx.module.global_expressions[expr] {
+                    crate::PendingArraySize::Override(handle)
+                } else {
+                    crate::PendingArraySize::Expression(expr)
+                }
+            }),
+            _ => Err(Error::ExpectedConstExprConcreteIntegerScalar(span)),
+        }
     }
 
     /// Build the Naga equivalent of a named AST type.

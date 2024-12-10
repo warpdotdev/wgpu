@@ -1329,6 +1329,9 @@ impl<I: Iterator<Item = u32>> Frontend<I> {
             crate::TypeInner::Array { size, .. } => {
                 let size = match size {
                     crate::ArraySize::Constant(size) => size.get(),
+                    crate::ArraySize::Pending(_) => {
+                        unreachable!();
+                    }
                     // A runtime sized array is not a composite type
                     crate::ArraySize::Dynamic => {
                         return Err(Error::InvalidAccessType(root_type_id))
