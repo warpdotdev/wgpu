@@ -74,7 +74,10 @@ impl Queue {
                 .command_encoder
                 .transition_buffers(&[hal::BufferBarrier {
                     buffer: zero_buffer,
-                    usage: hal::BufferUses::empty()..hal::BufferUses::COPY_DST,
+                    usage: hal::StateTransition {
+                        from: hal::BufferUses::empty(),
+                        to: hal::BufferUses::COPY_DST,
+                    },
                 }]);
             pending_writes
                 .command_encoder
@@ -83,7 +86,10 @@ impl Queue {
                 .command_encoder
                 .transition_buffers(&[hal::BufferBarrier {
                     buffer: zero_buffer,
-                    usage: hal::BufferUses::COPY_DST..hal::BufferUses::COPY_SRC,
+                    usage: hal::StateTransition {
+                        from: hal::BufferUses::COPY_DST,
+                        to: hal::BufferUses::COPY_SRC,
+                    },
                 }]);
         }
 
@@ -628,7 +634,10 @@ impl Queue {
         };
         let barriers = iter::once(hal::BufferBarrier {
             buffer: staging_buffer.raw(),
-            usage: hal::BufferUses::MAP_WRITE..hal::BufferUses::COPY_SRC,
+            usage: hal::StateTransition {
+                from: hal::BufferUses::MAP_WRITE,
+                to: hal::BufferUses::COPY_SRC,
+            },
         })
         .chain(transition.map(|pending| pending.into_hal(&buffer, &snatch_guard)))
         .collect::<Vec<_>>();
@@ -847,7 +856,10 @@ impl Queue {
         {
             let buffer_barrier = hal::BufferBarrier {
                 buffer: staging_buffer.raw(),
-                usage: hal::BufferUses::MAP_WRITE..hal::BufferUses::COPY_SRC,
+                usage: hal::StateTransition {
+                    from: hal::BufferUses::MAP_WRITE,
+                    to: hal::BufferUses::COPY_SRC,
+                },
             };
 
             let mut trackers = self.device.trackers.lock();

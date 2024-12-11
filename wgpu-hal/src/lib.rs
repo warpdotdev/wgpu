@@ -2251,17 +2251,23 @@ pub struct Rect<T> {
     pub h: T,
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub struct StateTransition<T> {
+    pub from: T,
+    pub to: T,
+}
+
 #[derive(Debug, Clone)]
 pub struct BufferBarrier<'a, B: DynBuffer + ?Sized> {
     pub buffer: &'a B,
-    pub usage: Range<BufferUses>,
+    pub usage: StateTransition<BufferUses>,
 }
 
 #[derive(Debug, Clone)]
 pub struct TextureBarrier<'a, T: DynTexture + ?Sized> {
     pub texture: &'a T,
     pub range: wgt::ImageSubresourceRange,
-    pub usage: Range<TextureUses>,
+    pub usage: StateTransition<TextureUses>,
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -2525,7 +2531,7 @@ bitflags::bitflags! {
 
 #[derive(Debug, Clone)]
 pub struct AccelerationStructureBarrier {
-    pub usage: Range<AccelerationStructureUses>,
+    pub usage: StateTransition<AccelerationStructureUses>,
 }
 
 #[derive(Debug, Copy, Clone)]
