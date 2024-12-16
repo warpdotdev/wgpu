@@ -418,15 +418,15 @@ fn map_pass_channel<V: Copy + Default>(
         Some(&Operations { load, store }) => {
             let (load_op, clear_value) = map_load_op(load);
             wgc::command::PassChannel {
-                load_op,
-                store_op: map_store_op(store),
+                load_op: Some(load_op),
+                store_op: Some(map_store_op(store)),
                 clear_value,
                 read_only: false,
             }
         }
         None => wgc::command::PassChannel {
-            load_op: wgc::command::LoadOp::Load,
-            store_op: wgc::command::StoreOp::Store,
+            load_op: None,
+            store_op: None,
             clear_value: V::default(),
             read_only: true,
         },
