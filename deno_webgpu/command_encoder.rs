@@ -157,13 +157,13 @@ pub fn op_webgpu_command_encoder_begin_render_pass(
                 depth: wgpu_core::command::PassChannel {
                     load_op: attachment.depth_load_op,
                     store_op: attachment.depth_store_op,
-                    clear_value: attachment.depth_clear_value,
+                    clear_value: Some(attachment.depth_clear_value),
                     read_only: attachment.depth_read_only,
                 },
                 stencil: wgpu_core::command::PassChannel {
                     load_op: attachment.stencil_load_op,
                     store_op: attachment.stencil_store_op,
-                    clear_value: attachment.stencil_clear_value,
+                    clear_value: Some(attachment.stencil_clear_value),
                     read_only: attachment.stencil_read_only,
                 },
             });

@@ -137,7 +137,7 @@ impl<V: Default> Default for PassChannel<V, LoadOp, StoreOp> {
     }
 }
 
-impl<V: Copy> PassChannel<V, Option<LoadOp>, Option<StoreOp>> {
+impl<V: Copy + Default> PassChannel<Option<V>, Option<LoadOp>, Option<StoreOp>> {
     fn resolve(&self) -> Result<PassChannel<V, LoadOp, StoreOp>, AttachmentError> {
         let load_op = if self.read_only {
             if self.load_op.is_some() {
@@ -160,7 +160,7 @@ impl<V: Copy> PassChannel<V, Option<LoadOp>, Option<StoreOp>> {
         Ok(PassChannel {
             load_op,
             store_op,
-            clear_value: self.clear_value,
+            clear_value: self.clear_value.unwrap_or_default(),
             read_only: self.read_only,
         })
     }
@@ -216,10 +216,11 @@ pub struct RenderPassDepthStencilAttachment {
     /// The view to use as an attachment.
     pub view: id::TextureViewId,
     /// What operations will be performed on the depth part of the attachment.
-    pub depth: PassChannel<f32, Option<LoadOp>, Option<StoreOp>>,
+    pub depth: PassChannel<Option<f32>, Option<LoadOp>, Option<StoreOp>>,
     /// What operations will be performed on the stencil part of the attachment.
-    pub stencil: PassChannel<u32, Option<LoadOp>, Option<StoreOp>>,
+    pub stencil: PassChannel<Option<u32>, Option<LoadOp>, Option<StoreOp>>,
 }
+
 /// Describes a depth/stencil attachment to a render pass.
 #[derive(Debug)]
 pub struct ArcRenderPassDepthStencilAttachment {
@@ -649,6 +650,10 @@ pub enum AttachmentError {
     NoLoad,
     #[error("Attachment without store")]
     NoStore,
+    #[error("LoadOp is `Clear` but no clear value was provided")]
+    NoClearValue,
+    #[error("Clear value ({0}) must be between 0.0 and 1.0, inclusive")]
+    ClearValueOutOfRange(f32),
 }
 
 /// Error encountered when performing a render pass.
@@ -1471,6 +1476,17 @@ impl Global {
                         return Err(CommandEncoderError::InvalidAttachment(AttachmentError::InvalidDepthStencilAttachmentFormat(
                             view.desc.format,
                         )));
+                    }
+
+                    // If this.depthLoadOp is "clear", this.depthClearValue must be provided and must be between 0.0 and 1.0, inclusive.
+                    if depth_stencil_attachment.depth.load_op == Some(LoadOp::Clear) {
+                        if let Some(clear_value) = depth_stencil_attachment.depth.clear_value {
+                            if !(0.0..=1.0).contains(&clear_value) {
+                                return Err(CommandEncoderError::InvalidAttachment(AttachmentError::ClearValueOutOfRange(clear_value)));
+                            }
+                        } else {
+                            return Err(CommandEncoderError::InvalidAttachment(AttachmentError::NoClearValue));
+                        }
                     }
 
                     Some(ArcRenderPassDepthStencilAttachment {
