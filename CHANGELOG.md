@@ -53,6 +53,12 @@ By @cwfitzgerald in [#6619](https://github.com/gfx-rs/wgpu/pull/6619).
 A regression introduced in 23.0.0 caused lifetimes of render and compute passes to be incorrectly enforced. While this is not
 a soundness issue, the intent is to move an error from runtime to compile time. This issue has been fixed and restored to the 22.0.0 behavior.
 
+### Bindless (`binding_array`) Grew More Capabilities
+
+- DX12 now supports `PARTIALLY_BOUND_BINDING_ARRAY` on Resource Binding Tier 3 Hardware. This is most D3D12 hardware [D3D12 Feature Table] for more information on what hardware supports this feature. By @cwfitzgerald in [#6734](https://github.com/gfx-rs/wgpu/pull/6734).
+
+[D3D12 Feature Table]: https://d3d12infodb.boolka.dev/FeatureTable.html
+
 ### `Device::create_shader_module_unchecked` Renamed and Now Has Configuration Options
 
 `create_shader_module_unchecked` became `create_shader_module_trusted`.
