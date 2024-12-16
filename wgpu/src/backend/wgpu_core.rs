@@ -969,11 +969,11 @@ impl dispatch::DeviceInterface for CoreDevice {
     fn create_shader_module(
         &self,
         desc: crate::ShaderModuleDescriptor<'_>,
-        shader_bound_checks: wgt::ShaderBoundChecks,
+        shader_bound_checks: wgt::ShaderRuntimeChecks,
     ) -> dispatch::DispatchShaderModule {
         let descriptor = wgc::pipeline::ShaderModuleDescriptor {
             label: desc.label.map(Borrowed),
-            shader_bound_checks,
+            runtime_checks: shader_bound_checks,
         };
         let source = match desc.source {
             #[cfg(feature = "spirv")]
@@ -1034,7 +1034,7 @@ impl dispatch::DeviceInterface for CoreDevice {
             label: desc.label.map(Borrowed),
             // Doesn't matter the value since spirv shaders aren't mutated to include
             // runtime checks
-            shader_bound_checks: unsafe { wgt::ShaderBoundChecks::unchecked() },
+            runtime_checks: wgt::ShaderRuntimeChecks::unchecked(),
         };
         let (id, error) = unsafe {
             self.context.0.device_create_shader_module_spirv(

@@ -117,7 +117,7 @@ impl super::Device {
 
         let ep_resources = &layout.per_stage_map[naga_stage];
 
-        let bounds_check_policy = if stage.module.runtime_checks {
+        let bounds_check_policy = if stage.module.bounds_checks.bounds_checks {
             naga::proc::BoundsCheckPolicy::Restrict
         } else {
             naga::proc::BoundsCheckPolicy::Unchecked
@@ -151,6 +151,7 @@ impl super::Device {
                 binding_array: naga::proc::BoundsCheckPolicy::Unchecked,
             },
             zero_initialize_workgroup_memory: stage.zero_initialize_workgroup_memory,
+            force_loop_bounding: stage.module.bounds_checks.force_loop_bounding,
         };
 
         let pipeline_options = naga::back::msl::PipelineOptions {
@@ -888,7 +889,7 @@ impl crate::Device for super::Device {
         match shader {
             crate::ShaderInput::Naga(naga) => Ok(super::ShaderModule {
                 naga,
-                runtime_checks: desc.runtime_checks,
+                bounds_checks: desc.runtime_checks,
             }),
             crate::ShaderInput::SpirV(_) => {
                 panic!("SPIRV_SHADER_PASSTHROUGH is not enabled for this backend")

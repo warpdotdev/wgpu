@@ -7447,50 +7447,73 @@ impl DispatchIndirectArgs {
 }
 
 /// Describes how shader bound checks should be performed.
-#[derive(Clone, Debug)]
+#[derive(Copy, Clone, Debug)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-pub struct ShaderBoundChecks {
-    runtime_checks: bool,
+pub struct ShaderRuntimeChecks {
+    /// Enforce bounds checks in shaders, even if the underlying driver doesn't
+    /// support doing so natively.
+    ///
+    /// When this is `true`, `wgpu` promises that shaders can only read or
+    /// write the accessible region of a bindgroup's buffer bindings. If
+    /// the underlying graphics platform cannot implement these bounds checks
+    /// itself, `wgpu` will inject bounds checks before presenting the
+    /// shader to the platform.
+    ///
+    /// When this is `false`, `wgpu` only enforces such bounds checks if the
+    /// underlying platform provides a way to do so itself. `wgpu` does not
+    /// itself add any bounds checks to generated shader code.
+    ///
+    /// Note that `wgpu` users may try to initialize only those portions of
+    /// buffers that they anticipate might be read from. Passing `false` here
+    /// may allow shaders to see wider regions of the buffers than expected,
+    /// making such deferred initialization visible to the application.
+    pub bounds_checks: bool,
+    ///
+    /// If false, the caller MUST ensure that all passed shaders do not contain any infinite loops.
+    ///
+    /// If it does, backend compilers MAY treat such a loop as unreachable code and draw
+    /// conclusions about other safety-critical code paths. This option SHOULD NOT be disabled
+    /// when running untrusted code.
+    pub force_loop_bounding: bool,
 }
 
-impl ShaderBoundChecks {
-    /// Creates a new configuration where the shader is bound checked.
+impl ShaderRuntimeChecks {
+    /// Creates a new configuration where the shader is fully checked.
     #[must_use]
-    pub fn new() -> Self {
-        ShaderBoundChecks {
-            runtime_checks: true,
-        }
+    pub fn checked() -> Self {
+        unsafe { Self::all(true) }
     }
 
-    /// Creates a new configuration where the shader isn't bound checked.
+    /// Creates a new configuration where none of the checks are performed.
     ///
     /// # Safety
     ///
-    /// The caller MUST ensure that all shaders built with this configuration
-    /// don't perform any out of bounds reads or writes.
-    ///
-    /// Note that `wgpu_core`, in particular, initializes only those portions of
-    /// buffers that it expects might be read, and it does not expect contents
-    /// outside the ranges bound in bindgroups to be accessible, so using this
-    /// configuration with ill-behaved shaders could expose uninitialized GPU
-    /// memory contents to the application.
+    /// See the documentation for the `set_*` methods for the safety requirements
+    /// of each sub-configuration.
     #[must_use]
-    pub unsafe fn unchecked() -> Self {
-        ShaderBoundChecks {
-            runtime_checks: false,
-        }
+    pub fn unchecked() -> Self {
+        unsafe { Self::all(false) }
     }
 
-    /// Query whether runtime bound checks are enabled in this configuration
+    /// Creates a new configuration where all checks are enabled or disabled. To safely
+    /// create a configuration with all checks enabled, use [`ShaderRuntimeChecks::checked`].
+    ///
+    /// # Safety
+    ///
+    /// See the documentation for the `set_*` methods for the safety requirements
+    /// of each sub-configuration.
     #[must_use]
-    pub fn runtime_checks(&self) -> bool {
-        self.runtime_checks
+    pub unsafe fn all(all_checks: bool) -> Self {
+        Self {
+            bounds_checks: all_checks,
+            force_loop_bounding: all_checks,
+        }
     }
 }
 
-impl Default for ShaderBoundChecks {
+impl Default for ShaderRuntimeChecks {
     fn default() -> Self {
-        Self::new()
+        Self::checked()
     }
 }
 

@@ -600,6 +600,8 @@ struct ExpressionContext<'a> {
     /// accesses. These may need to be cached in temporary variables. See
     /// `index::find_checked_indexes` for details.
     guarded_indices: HandleSet<crate::Expression>,
+    /// See [`Writer::emit_force_bounded_loop_macro`] for details.
+    force_loop_bounding: bool,
 }
 
 impl<'a> ExpressionContext<'a> {
@@ -3068,13 +3070,15 @@ impl<W: Write> Writer<W> {
                         writeln!(self.out, "{level}while(true) {{",)?;
                     }
                     self.put_block(level.next(), body, context)?;
-                    self.emit_force_bounded_loop_macro()?;
-                    writeln!(
-                        self.out,
-                        "{}{}",
-                        level.next(),
-                        self.force_bounded_loop_macro_name
-                    )?;
+                    if context.expression.force_loop_bounding {
+                        self.emit_force_bounded_loop_macro()?;
+                        writeln!(
+                            self.out,
+                            "{}{}",
+                            level.next(),
+                            self.force_bounded_loop_macro_name
+                        )?;
+                    }
                     writeln!(self.out, "{level}}}")?;
                 }
                 crate::Statement::Break => {
@@ -4885,6 +4889,7 @@ template <typename A>
                     module,
                     mod_info,
                     pipeline_options,
+                    force_loop_bounding: options.force_loop_bounding,
                 },
                 result_struct: None,
             };
@@ -5785,6 +5790,7 @@ template <typename A>
                     module,
                     mod_info,
                     pipeline_options,
+                    force_loop_bounding: options.force_loop_bounding,
                 },
                 result_struct: Some(&stage_out_name),
             };

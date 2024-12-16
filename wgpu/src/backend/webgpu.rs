@@ -1668,7 +1668,7 @@ impl dispatch::DeviceInterface for WebDevice {
     fn create_shader_module(
         &self,
         desc: crate::ShaderModuleDescriptor<'_>,
-        _shader_bound_checks: wgt::ShaderBoundChecks,
+        _shader_runtime_checks: crate::ShaderRuntimeChecks,
     ) -> dispatch::DispatchShaderModule {
         let shader_module_result = match desc.source {
             #[cfg(feature = "spirv")]
