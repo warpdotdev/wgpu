@@ -115,6 +115,7 @@ pub fn op_webgpu_create_texture_view(
         format: args.format,
         dimension: args.dimension,
         range: args.range,
+        usage: None, // FIXME: Obtain actual value from desc
     };
 
     gfx_put!(instance.texture_create_view(
