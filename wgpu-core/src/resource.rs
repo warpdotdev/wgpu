@@ -570,10 +570,7 @@ impl Buffer {
                     };
                     Ok(())
                 }
-                Err(e) => {
-                    log::error!("Mapping failed: {e}");
-                    Err(e)
-                }
+                Err(e) => Err(e),
             }
         } else {
             *self.map_state.lock() = BufferMapState::Active {
