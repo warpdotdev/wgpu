@@ -2,7 +2,7 @@ use parking_lot::Mutex;
 
 use crate::{dispatch::InstanceInterface, *};
 
-use std::{future::Future, sync::Arc};
+use std::future::Future;
 
 /// Context for all other wgpu objects. Instance of wgpu.
 ///
@@ -14,7 +14,7 @@ use std::{future::Future, sync::Arc};
 /// Corresponds to [WebGPU `GPU`](https://gpuweb.github.io/gpuweb/#gpu-interface).
 #[derive(Debug, Clone)]
 pub struct Instance {
-    inner: Arc<dispatch::DispatchInstance>,
+    inner: dispatch::DispatchInstance,
 }
 #[cfg(send_sync)]
 static_assertions::assert_impl_all!(Instance: Send, Sync);
@@ -131,7 +131,7 @@ impl Instance {
 
             if is_only_available_backend || (requested_webgpu && support_webgpu) {
                 return Self {
-                    inner: Arc::new(crate::backend::ContextWebGpu::new(_instance_desc).into()),
+                    inner: crate::backend::ContextWebGpu::new(_instance_desc).into(),
                 };
             }
         }
@@ -139,7 +139,7 @@ impl Instance {
         #[cfg(wgpu_core)]
         {
             return Self {
-                inner: Arc::new(crate::backend::ContextWgpuCore::new(_instance_desc).into()),
+                inner: crate::backend::ContextWgpuCore::new(_instance_desc).into(),
             };
         }
 
@@ -161,9 +161,7 @@ impl Instance {
     pub unsafe fn from_hal<A: wgc::hal_api::HalApi>(hal_instance: A::Instance) -> Self {
         Self {
             inner: unsafe {
-                Arc::new(
-                    crate::backend::ContextWgpuCore::from_hal_instance::<A>(hal_instance).into(),
-                )
+                crate::backend::ContextWgpuCore::from_hal_instance::<A>(hal_instance).into()
             },
         }
     }
@@ -198,7 +196,7 @@ impl Instance {
     pub unsafe fn from_core(core_instance: wgc::instance::Instance) -> Self {
         Self {
             inner: unsafe {
-                Arc::new(crate::backend::ContextWgpuCore::from_core_instance(core_instance).into())
+                crate::backend::ContextWgpuCore::from_core_instance(core_instance).into()
             },
         }
     }
@@ -222,9 +220,7 @@ impl Instance {
                     context: core_instance.clone(),
                     id: adapter,
                 };
-                crate::Adapter {
-                    inner: Arc::new(core.into()),
-                }
+                crate::Adapter { inner: core.into() }
             })
             .collect()
     }
@@ -241,11 +237,7 @@ impl Instance {
         options: &RequestAdapterOptions<'_, '_>,
     ) -> impl Future<Output = Option<Adapter>> + WasmNotSend {
         let future = self.inner.request_adapter(options);
-        async move {
-            future.await.map(|adapter| Adapter {
-                inner: Arc::new(adapter),
-            })
-        }
+        async move { future.await.map(|adapter| Adapter { inner: adapter }) }
     }
 
     /// Converts a wgpu-hal `ExposedAdapter` to a wgpu [`Adapter`].
@@ -265,9 +257,7 @@ impl Instance {
             id: adapter,
         };
 
-        Adapter {
-            inner: Arc::new(core.into()),
-        }
+        Adapter { inner: core.into() }
     }
 
     /// Creates a new surface targeting a given window/canvas/surface/etc..
