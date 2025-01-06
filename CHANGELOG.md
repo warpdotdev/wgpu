@@ -125,6 +125,18 @@ There are some limitations to keep in mind with this new functionality:
 
 By @ErichDonGubler in [#6456](https://github.com/gfx-rs/wgpu/pull/6456), [#6148](https://github.com/gfx-rs/wgpu/pull/6148), [#6533](https://github.com/gfx-rs/wgpu/pull/6533), [#6353](https://github.com/gfx-rs/wgpu/pull/6353), [#6537](https://github.com/gfx-rs/wgpu/pull/6537).
 
+#### `wgpu::Instance::new` now takes `InstanceDescriptor` by reference
+
+Previously `wgpu::Instance::new` took `InstanceDescriptor` by value (which is overall fairly uncommon in wgpu).
+Furthermore, `InstanceDescriptor` is now cloneable.
+
+```diff
+- let instance = wgpu::Instance::new(instance_desc);
++ let instance = wgpu::Instance::new(&instance_desc);
+```
+
+By @wumpf in [#6849](https://github.com/gfx-rs/wgpu/pull/6849).
+
 #### New Features
 
 ##### Naga
