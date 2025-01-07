@@ -7692,7 +7692,9 @@ pub enum Dx12Compiler {
         dxil_path: PathBuf,
     },
     /// The statically-linked variant of Dxc.
-    /// The `static-dxc` feature is required to use this.
+    ///
+    /// The `static-dxc` feature is required for this setting to be used successfully on DX12.
+    /// Not available on `windows-aarch64-pc-*` targets.
     StaticDxc,
 }
 
