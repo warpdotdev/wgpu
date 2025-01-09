@@ -163,6 +163,14 @@ By @wumpf in [#6849](https://github.com/gfx-rs/wgpu/pull/6849).
 - Allow for statically linking DXC rather than including separate `.dll` files. By @DouglasDwyer in [#6574](https://github.com/gfx-rs/wgpu/pull/6574).
 - `DeviceType` and `AdapterInfo` now impl `Hash` by @cwfitzgerald in [#6868](https://github.com/gfx-rs/wgpu/pull/6868)
 
+##### Vulkan
+
+- Allow using some 32-bit floating-point atomic operations (load, store, add, sub, exchange) in shaders. It requires the extension `VK_EXT_shader_atomic_float`. By @AsherJingkongChen in [#6234](https://github.com/gfx-rs/wgpu/pull/6234).
+
+##### Metal
+
+- Allow using some 32-bit floating-point atomic operations (load, store, add, sub, exchange) in shaders. It requires Metal 3.0+ with Apple 7, 8, 9 or Mac 2. By @AsherJingkongChen in [#6234](https://github.com/gfx-rs/wgpu/pull/6234).
+
 #### Changes
 
 ##### Naga

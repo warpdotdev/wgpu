@@ -290,6 +290,7 @@ struct PrivateCapabilities {
     supports_simd_scoped_operations: bool,
     int64: bool,
     int64_atomics: bool,
+    float_atomics: bool,
     supports_shared_event: bool,
 }
 
