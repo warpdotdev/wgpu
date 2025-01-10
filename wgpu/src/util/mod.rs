@@ -7,6 +7,7 @@ mod belt;
 mod device;
 mod encoder;
 mod init;
+mod texture_blitter;
 
 use std::sync::Arc;
 use std::{borrow::Cow, ptr::copy_nonoverlapping};
@@ -15,6 +16,8 @@ pub use belt::StagingBelt;
 pub use device::{BufferInitDescriptor, DeviceExt};
 pub use encoder::RenderEncoder;
 pub use init::*;
+#[cfg(feature = "wgsl")]
+pub use texture_blitter::{TextureBlitter, TextureBlitterBuilder};
 pub use wgt::{
     math::*, DispatchIndirectArgs, DrawIndexedIndirectArgs, DrawIndirectArgs, TextureDataOrder,
 };
