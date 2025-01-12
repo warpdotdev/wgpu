@@ -7,15 +7,26 @@
     clippy::match_like_matches_macro,
 )]
 #![warn(clippy::ptr_as_ptr, missing_docs, unsafe_op_in_unsafe_fn)]
+#![no_std]
+
+#[cfg(feature = "std")]
+extern crate std;
+
+extern crate alloc;
+
+use alloc::{string::String, vec, vec::Vec};
+use core::{
+    hash::{Hash, Hasher},
+    mem::size_of,
+    num::NonZeroU32,
+    ops::Range,
+};
 
 #[cfg(any(feature = "serde", test))]
-use serde::Deserialize;
-#[cfg(any(feature = "serde", test))]
-use serde::Serialize;
-use std::hash::{Hash, Hasher};
-use std::mem::size_of;
-use std::path::PathBuf;
-use std::{num::NonZeroU32, ops::Range};
+use {
+    alloc::format,
+    serde::{Deserialize, Serialize},
+};
 
 pub mod assertions;
 mod counters;
@@ -26,7 +37,7 @@ pub use counters::*;
 /// Integral type used for buffer offsets.
 pub type BufferAddress = u64;
 /// Integral type used for buffer slice sizes.
-pub type BufferSize = std::num::NonZeroU64;
+pub type BufferSize = core::num::NonZeroU64;
 /// Integral type used for binding locations in shaders.
 pub type ShaderLocation = u32;
 /// Integral type used for dynamic bind group offsets.
@@ -88,8 +99,8 @@ impl Backend {
     }
 }
 
-impl std::fmt::Display for Backend {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for Backend {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         f.write_str(self.to_str())
     }
 }
@@ -1078,11 +1089,16 @@ impl InstanceFlags {
     /// - WGPU_VALIDATION
     #[must_use]
     pub fn with_env(mut self) -> Self {
-        fn env(key: &str) -> Option<bool> {
-            std::env::var(key).ok().map(|s| match s.as_str() {
+        fn env(_key: &str) -> Option<bool> {
+            #[cfg(feature = "std")]
+            return std::env::var(_key).ok().map(|s| match s.as_str() {
                 "0" => false,
                 _ => true,
-            })
+            });
+
+            // Without access to std, environment variables are considered unset
+            #[cfg(not(feature = "std"))]
+            return None;
         }
 
         if let Some(bit) = env("WGPU_VALIDATION") {
@@ -1479,7 +1495,7 @@ impl Limits {
         fatal: bool,
         mut fail_fn: impl FnMut(&'static str, u64, u64),
     ) {
-        use std::cmp::Ordering;
+        use core::cmp::Ordering;
 
         macro_rules! compare {
             ($name:ident, $ordering:ident) => {
@@ -2848,7 +2864,7 @@ impl<'de> Deserialize<'de> for TextureFormat {
         impl de::Visitor<'_> for TextureFormatVisitor {
             type Value = TextureFormat;
 
-            fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
+            fn expecting(&self, formatter: &mut core::fmt::Formatter) -> core::fmt::Result {
                 formatter.write_str("a valid texture format")
             }
 
@@ -4111,6 +4127,8 @@ impl TextureFormat {
 
 #[test]
 fn texture_format_serialize() {
+    use alloc::string::ToString;
+
     assert_eq!(
         serde_json::to_string(&TextureFormat::R8Unorm).unwrap(),
         "\"r8unorm\"".to_string()
@@ -5961,8 +5979,8 @@ impl Origin2d {
     }
 }
 
-impl std::fmt::Debug for Origin2d {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Origin2d {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         (self.x, self.y).fmt(f)
     }
 }
@@ -6004,8 +6022,8 @@ impl Default for Origin3d {
     }
 }
 
-impl std::fmt::Debug for Origin3d {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Origin3d {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         (self.x, self.y, self.z).fmt(f)
     }
 }
@@ -6028,8 +6046,8 @@ pub struct Extent3d {
     pub depth_or_array_layers: u32,
 }
 
-impl std::fmt::Debug for Extent3d {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Extent3d {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         (self.width, self.height, self.depth_or_array_layers).fmt(f)
     }
 }
@@ -7221,7 +7239,7 @@ impl ExternalImageSource {
 }
 
 #[cfg(target_arch = "wasm32")]
-impl std::ops::Deref for ExternalImageSource {
+impl core::ops::Deref for ExternalImageSource {
     type Target = js_sys::Object;
 
     fn deref(&self) -> &Self::Target {
@@ -7546,8 +7564,8 @@ impl DrawIndirectArgs {
     #[must_use]
     pub fn as_bytes(&self) -> &[u8] {
         unsafe {
-            std::mem::transmute(std::slice::from_raw_parts(
-                std::ptr::from_ref(self).cast::<u8>(),
+            core::mem::transmute(core::slice::from_raw_parts(
+                core::ptr::from_ref(self).cast::<u8>(),
                 size_of::<Self>(),
             ))
         }
@@ -7577,8 +7595,8 @@ impl DrawIndexedIndirectArgs {
     #[must_use]
     pub fn as_bytes(&self) -> &[u8] {
         unsafe {
-            std::mem::transmute(std::slice::from_raw_parts(
-                std::ptr::from_ref(self).cast::<u8>(),
+            core::mem::transmute(core::slice::from_raw_parts(
+                core::ptr::from_ref(self).cast::<u8>(),
                 size_of::<Self>(),
             ))
         }
@@ -7602,8 +7620,8 @@ impl DispatchIndirectArgs {
     #[must_use]
     pub fn as_bytes(&self) -> &[u8] {
         unsafe {
-            std::mem::transmute(std::slice::from_raw_parts(
-                std::ptr::from_ref(self).cast::<u8>(),
+            core::mem::transmute(core::slice::from_raw_parts(
+                core::ptr::from_ref(self).cast::<u8>(),
                 size_of::<Self>(),
             ))
         }
@@ -7705,9 +7723,9 @@ pub enum Dx12Compiler {
     /// It also requires WDDM 2.1 (Windows 10 version 1607).
     DynamicDxc {
         /// Path to `dxcompiler.dll`.
-        dxc_path: PathBuf,
+        dxc_path: String,
         /// Path to `dxil.dll`.
-        dxil_path: PathBuf,
+        dxil_path: String,
     },
     /// The statically-linked variant of Dxc.
     ///
