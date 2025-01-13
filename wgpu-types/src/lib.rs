@@ -811,6 +811,15 @@ bitflags::bitflags! {
         ///
         /// This is a native only feature.
         const VERTEX_ATTRIBUTE_64BIT = 1 << 45;
+        /// Enables image atomic fetch add, and, xor, or, min, and max for R32Uint and R32Sint textures.
+        ///
+        /// Supported platforms:
+        /// - Vulkan
+        /// - DX12
+        /// - Metal (with MSL 3.1+)
+        ///
+        /// This is a native only feature.
+        const TEXTURE_ATOMIC = 1 << 46;
         /// Allows for creation of textures of format [`TextureFormat::NV12`]
         ///
         /// Supported platforms:
@@ -2424,8 +2433,11 @@ bitflags::bitflags! {
         /// When used as a STORAGE texture, then a texture with this format can be bound with
         /// [`StorageTextureAccess::ReadWrite`].
         const STORAGE_READ_WRITE = 1 << 8;
+        /// When used as a STORAGE texture, then a texture with this format can be bound with
+        /// [`StorageTextureAccess::Atomic`].
+        const STORAGE_ATOMIC = 1 << 9;
         /// If not present, the texture can't be blended into the render target.
-        const BLENDABLE = 1 << 9;
+        const BLENDABLE = 1 << 10;
     }
 }
 
@@ -3458,7 +3470,12 @@ impl TextureFormat {
         let attachment = basic | TextureUsages::RENDER_ATTACHMENT;
         let storage = basic | TextureUsages::STORAGE_BINDING;
         let binding = TextureUsages::TEXTURE_BINDING;
-        let all_flags = TextureUsages::all();
+        let all_flags = attachment | storage | binding;
+        let atomic = if device_features.contains(Features::TEXTURE_ATOMIC) {
+            all_flags | TextureUsages::STORAGE_ATOMIC
+        } else {
+            all_flags
+        };
         let rg11b10f = if device_features.contains(Features::RG11B10UFLOAT_RENDERABLE) {
             attachment
         } else {
@@ -3489,8 +3506,8 @@ impl TextureFormat {
             Self::Rg8Snorm =>             (        none,      basic),
             Self::Rg8Uint =>              (        msaa, attachment),
             Self::Rg8Sint =>              (        msaa, attachment),
-            Self::R32Uint =>              (       s_all,  all_flags),
-            Self::R32Sint =>              (       s_all,  all_flags),
+            Self::R32Uint =>              (       s_all,     atomic),
+            Self::R32Sint =>              (       s_all,     atomic),
             Self::R32Float =>             (msaa | s_all,  all_flags),
             Self::Rg16Uint =>             (        msaa, attachment),
             Self::Rg16Sint =>             (        msaa, attachment),
@@ -3573,6 +3590,10 @@ impl TextureFormat {
 
         flags.set(TextureFormatFeatureFlags::FILTERABLE, is_filterable);
         flags.set(TextureFormatFeatureFlags::BLENDABLE, is_blendable);
+        flags.set(
+            TextureFormatFeatureFlags::STORAGE_ATOMIC,
+            allowed_usages.contains(TextureUsages::STORAGE_ATOMIC),
+        );
 
         TextureFormatFeatures {
             allowed_usages,
@@ -5686,6 +5707,11 @@ bitflags::bitflags! {
     #[cfg_attr(feature = "serde", serde(transparent))]
     #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
     pub struct TextureUsages: u32 {
+        //
+        // ---- Start numbering at 1 << 0 ----
+        //
+        // WebGPU features:
+        //
         /// Allows a texture to be the source in a [`CommandEncoder::copy_texture_to_buffer`] or
         /// [`CommandEncoder::copy_texture_to_texture`] operation.
         const COPY_SRC = 1 << 0;
@@ -5698,6 +5724,14 @@ bitflags::bitflags! {
         const STORAGE_BINDING = 1 << 3;
         /// Allows a texture to be an output attachment of a render pass.
         const RENDER_ATTACHMENT = 1 << 4;
+
+        //
+        // ---- Restart Numbering for Native Features ---
+        //
+        // Native Features:
+        //
+        /// Allows a texture to be used with image atomics. Requires [`Features::TEXTURE_ATOMIC`].
+        const STORAGE_ATOMIC = 1 << 16;
     }
 }
 
@@ -6882,6 +6916,18 @@ pub enum StorageTextureAccess {
     /// layout(set=0, binding=0, r32f) uniform image2D myStorageImage;
     /// ```
     ReadWrite,
+    /// The texture can be both read and written in the shader via atomics and must be annotated
+    /// with `read_write` in WGSL.
+    ///
+    /// [`Features::TEXTURE_ADAPTER_SPECIFIC_FORMAT_FEATURES`] must be enabled to use this access
+    /// mode.  This is a nonstandard, native-only extension.
+    ///
+    /// Example WGSL syntax:
+    /// ```rust,ignore
+    /// @group(0) @binding(0)
+    /// var my_storage_image: texture_storage_2d<r32uint, atomic>;
+    /// ```
+    Atomic,
 }
 
 /// Specific type of a sampler binding.
