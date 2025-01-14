@@ -2447,7 +2447,7 @@ impl dispatch::CommandEncoderInterface for CoreCommandEncoder {
                             transform_buffer_offset: tg.transform_buffer_offset,
                             first_vertex: tg.first_vertex,
                             vertex_stride: tg.vertex_stride,
-                            index_buffer_offset: tg.index_buffer_offset,
+                            first_index: tg.first_index,
                         }
                     });
                     wgc::ray_tracing::BlasGeometries::TriangleGeometries(Box::new(iter))
@@ -2497,7 +2497,7 @@ impl dispatch::CommandEncoderInterface for CoreCommandEncoder {
                             transform_buffer_offset: tg.transform_buffer_offset,
                             first_vertex: tg.first_vertex,
                             vertex_stride: tg.vertex_stride,
-                            index_buffer_offset: tg.index_buffer_offset,
+                            first_index: tg.first_index,
                         }
                     });
                     wgc::ray_tracing::BlasGeometries::TriangleGeometries(Box::new(iter))
