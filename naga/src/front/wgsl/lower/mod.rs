@@ -1106,17 +1106,13 @@ impl<'source, 'temp> Lowerer<'source, 'temp> {
                         .insert(c.name.name, LoweredGlobalDecl::Const(handle));
                 }
                 ast::GlobalDeclKind::Override(ref o) => {
-                    let init = o
-                        .init
-                        .map(|init| self.expression(init, &mut ctx.as_override()))
-                        .transpose()?;
-                    let inferred_type = init
-                        .map(|init| ctx.as_const().register_type(init))
-                        .transpose()?;
-
                     let explicit_ty =
-                        o.ty.map(|ty| self.resolve_ast_type(ty, &mut ctx))
+                        o.ty.map(|ast| self.resolve_ast_type(ast, &mut ctx))
                             .transpose()?;
+
+                    let mut ectx = ctx.as_override();
+
+                    let (ty, init) = self.type_and_init(o.name, o.init, explicit_ty, &mut ectx)?;
 
                     let id =
                         o.id.map(|id| self.const_u32(id, &mut ctx.as_const()))
@@ -1129,26 +1125,6 @@ impl<'source, 'temp> Lowerer<'source, 'temp> {
                         )
                     } else {
                         None
-                    };
-
-                    let ty = match (explicit_ty, inferred_type) {
-                        (Some(explicit_ty), Some(inferred_type)) => {
-                            if explicit_ty == inferred_type {
-                                explicit_ty
-                            } else {
-                                let gctx = ctx.module.to_ctx();
-                                return Err(Error::InitializationTypeMismatch {
-                                    name: o.name.span,
-                                    expected: explicit_ty.to_wgsl(&gctx).into(),
-                                    got: inferred_type.to_wgsl(&gctx).into(),
-                                });
-                            }
-                        }
-                        (Some(explicit_ty), None) => explicit_ty,
-                        (None, Some(inferred_type)) => inferred_type,
-                        (None, None) => {
-                            return Err(Error::DeclMissingTypeAndInit(o.name.span));
-                        }
                     };
 
                     let handle = ctx.module.overrides.append(
