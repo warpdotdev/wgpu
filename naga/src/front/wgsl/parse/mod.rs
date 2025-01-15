@@ -950,9 +950,6 @@ impl Parser {
                     match enclosing {
                         Some(Rule::GenericExpr) => |token| match token {
                             Token::LogicalOperation('<') => Some(crate::BinaryOperator::LessEqual),
-                            Token::LogicalOperation('>') => {
-                                Some(crate::BinaryOperator::GreaterEqual)
-                            }
                             _ => None,
                         },
                         _ => |token| match token {
