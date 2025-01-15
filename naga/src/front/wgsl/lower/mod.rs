@@ -1042,38 +1042,8 @@ impl<'source, 'temp> Lowerer<'source, 'temp> {
                         v.ty.map(|ast| self.resolve_ast_type(ast, &mut ctx))
                             .transpose()?;
 
-                    let mut ectx = ctx.as_override();
-
-                    let ty;
-                    let initializer;
-                    match (v.init, explicit_ty) {
-                        (Some(init), Some(explicit_ty)) => {
-                            let init = self.expression_for_abstract(init, &mut ectx)?;
-                            let ty_res = crate::proc::TypeResolution::Handle(explicit_ty);
-                            let init = ectx
-                                .try_automatic_conversions(init, &ty_res, v.name.span)
-                                .map_err(|error| match error {
-                                Error::AutoConversion(e) => Error::InitializationTypeMismatch {
-                                    name: v.name.span,
-                                    expected: e.dest_type,
-                                    got: e.source_type,
-                                },
-                                other => other,
-                            })?;
-                            ty = explicit_ty;
-                            initializer = Some(init);
-                        }
-                        (Some(init), None) => {
-                            let concretized = self.expression(init, &mut ectx)?;
-                            ty = ectx.register_type(concretized)?;
-                            initializer = Some(concretized);
-                        }
-                        (None, Some(explicit_ty)) => {
-                            ty = explicit_ty;
-                            initializer = None;
-                        }
-                        (None, None) => return Err(Error::DeclMissingTypeAndInit(v.name.span)),
-                    }
+                    let (ty, initializer) =
+                        self.type_and_init(v.name, v.init, explicit_ty, &mut ctx.as_override())?;
 
                     let binding = if let Some(ref binding) = v.binding {
                         Some(crate::ResourceBinding {
@@ -1231,6 +1201,47 @@ impl<'source, 'temp> Lowerer<'source, 'temp> {
         crate::compact::compact(&mut module);
 
         Ok(module)
+    }
+
+    /// Obtain (inferred) type and initializer after automatic conversion
+    fn type_and_init(
+        &mut self,
+        name: ast::Ident<'source>,
+        init: Option<Handle<ast::Expression<'source>>>,
+        explicit_ty: Option<Handle<crate::Type>>,
+        ectx: &mut ExpressionContext<'source, '_, '_>,
+    ) -> Result<(Handle<crate::Type>, Option<Handle<crate::Expression>>), Error<'source>> {
+        let ty;
+        let initializer;
+        match (init, explicit_ty) {
+            (Some(init), Some(explicit_ty)) => {
+                let init = self.expression_for_abstract(init, ectx)?;
+                let ty_res = crate::proc::TypeResolution::Handle(explicit_ty);
+                let init = ectx
+                    .try_automatic_conversions(init, &ty_res, name.span)
+                    .map_err(|error| match error {
+                        Error::AutoConversion(e) => Error::InitializationTypeMismatch {
+                            name: name.span,
+                            expected: e.dest_type,
+                            got: e.source_type,
+                        },
+                        other => other,
+                    })?;
+                ty = explicit_ty;
+                initializer = Some(init);
+            }
+            (Some(init), None) => {
+                let concretized = self.expression(init, ectx)?;
+                ty = ectx.register_type(concretized)?;
+                initializer = Some(concretized);
+            }
+            (None, Some(explicit_ty)) => {
+                ty = explicit_ty;
+                initializer = None;
+            }
+            (None, None) => return Err(Error::DeclMissingTypeAndInit(name.span)),
+        }
+        Ok((ty, initializer))
     }
 
     fn function(
