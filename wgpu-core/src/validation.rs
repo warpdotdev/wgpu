@@ -278,7 +278,7 @@ pub enum StageError {
     InvalidResource(#[from] InvalidResourceError),
 }
 
-fn map_storage_format_to_naga(format: wgt::TextureFormat) -> Option<naga::StorageFormat> {
+pub fn map_storage_format_to_naga(format: wgt::TextureFormat) -> Option<naga::StorageFormat> {
     use naga::StorageFormat as Sf;
     use wgt::TextureFormat as Tf;
 
@@ -335,7 +335,7 @@ fn map_storage_format_to_naga(format: wgt::TextureFormat) -> Option<naga::Storag
     })
 }
 
-fn map_storage_format_from_naga(format: naga::StorageFormat) -> wgt::TextureFormat {
+pub fn map_storage_format_from_naga(format: naga::StorageFormat) -> wgt::TextureFormat {
     use naga::StorageFormat as Sf;
     use wgt::TextureFormat as Tf;
 

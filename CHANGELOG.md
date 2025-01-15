@@ -529,6 +529,7 @@ By @MarijnS95 in [#6006](https://github.com/gfx-rs/wgpu/pull/6006).
 - When mapping buffers for reading, mark buffers as initialized only when they have `MAP_WRITE` usage. By @teoxoy in [#6178](https://github.com/gfx-rs/wgpu/pull/6178).
 - Add a separate pipeline constants error. By @teoxoy in [#6094](https://github.com/gfx-rs/wgpu/pull/6094).
 - Ensure safety of indirect dispatch by injecting a compute shader that validates the content of the indirect buffer. By @teoxoy in [#5714](https://github.com/gfx-rs/wgpu/pull/5714).
+- Add conversions between `TextureFormat` and ` StorageFormat`. By @caelunshun in [#6185](https://github.com/gfx-rs/wgpu/pull/6185)
 
 #### GLES / OpenGL
 
