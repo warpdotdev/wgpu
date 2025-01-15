@@ -177,6 +177,10 @@ By @wumpf in [#6849](https://github.com/gfx-rs/wgpu/pull/6849).
 - Add build support for Apple Vision Pro. By @guusw in [#6611](https://github.com/gfx-rs/wgpu/pull/6611).
 - Add `raw_handle` method to access raw Metal textures in [#6894](https://github.com/gfx-rs/wgpu/pull/6894).
 
+#### D3D12
+
+- Support DXR (DirectX Ray-tracing) in wgpu-hal. By @Vecvec in [#6777](https://github.com/gfx-rs/wgpu/pull/6777)
+
 #### Changes
 
 ##### Naga
