@@ -1,4 +1,5 @@
 use std::borrow::Cow;
+use wgpu::Backends;
 use winit::{
     event::{Event, WindowEvent},
     event_loop::EventLoop,
@@ -10,7 +11,10 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
     size.width = size.width.max(1);
     size.height = size.height.max(1);
 
-    let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor::from_env_or_default());
+    let mut instance_descriptor = wgpu::InstanceDescriptor::from_env_or_default();
+    instance_descriptor.backends = Backends::VULKAN;
+    dbg!(&instance_descriptor);
+    let instance = wgpu::Instance::new(&instance_descriptor);
 
     let surface = instance.create_surface(&window).unwrap();
     let adapter = instance
@@ -52,6 +56,7 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
     });
 
     let swapchain_capabilities = surface.get_capabilities(&adapter);
+    dbg!(&swapchain_capabilities);
     let swapchain_format = swapchain_capabilities.formats[0];
 
     let render_pipeline = device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
@@ -67,7 +72,11 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
             module: &shader,
             entry_point: Some("fs_main"),
             compilation_options: Default::default(),
-            targets: &[Some(swapchain_format.into())],
+            targets: &[Some(wgpu::ColorTargetState {
+                format: swapchain_format,
+                blend: Some(wgpu::BlendState::ALPHA_BLENDING),
+                write_mask: wgpu::ColorWrites::ALL,
+            })],
         }),
         primitive: wgpu::PrimitiveState::default(),
         depth_stencil: None,
@@ -79,6 +88,8 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
     let mut config = surface
         .get_default_config(&adapter, size.width, size.height)
         .unwrap();
+    // Will panic if the surface isn't actually capable of this.
+    config.alpha_mode = wgpu::CompositeAlphaMode::Inherit;
     surface.configure(&device, &config);
 
     let window = &window;
@@ -122,7 +133,12 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
                                         view: &view,
                                         resolve_target: None,
                                         ops: wgpu::Operations {
-                                            load: wgpu::LoadOp::Clear(wgpu::Color::GREEN),
+                                            load: wgpu::LoadOp::Clear(wgpu::Color {
+                                                r: 0.,
+                                                g: 0.,
+                                                b: 0.5,
+                                                a: 0.5,
+                                            }),
                                             store: wgpu::StoreOp::Store,
                                         },
                                     })],
