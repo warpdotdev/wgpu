@@ -40,6 +40,13 @@ Bottom level categories:
 
 ## Unreleased
 
+### v24.0.1 (2025-01-22)
+
+#### Bug Fixes
+
+* Fix `wgpu` not building with `--no-default-features` on when targeting `wasm32-unknown-unknown`. By @wumpf in [#6946](https://github.com/gfx-rs/wgpu/pull/6946).
+* Implement `Clone` on `ShaderModule`. By @a1phyr in [#6937](https://github.com/gfx-rs/wgpu/pull/6937).
+
 ## v24.0.0 (2025-01-15)
 
 ### Major changes
