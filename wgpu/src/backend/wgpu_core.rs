@@ -3500,10 +3500,6 @@ impl Drop for CoreSurface {
 
 impl dispatch::SurfaceOutputDetailInterface for CoreSurfaceOutputDetail {
     fn present(&self) {
-        let error = SurfaceError::Device(wgc::device::DeviceError::Lost);
-        self.context
-            .handle_error_nolabel(&self.error_sink, error, "Surface::present");
-
         match self.context.0.surface_present(self.surface_id) {
             Ok(_status) => (),
             Err(err) => {
