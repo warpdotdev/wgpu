@@ -13,10 +13,7 @@ use std::{
     borrow::Cow::Borrowed, error::Error, fmt, future::ready, ops::Range, pin::Pin, ptr::NonNull,
     slice, sync::Arc,
 };
-use wgc::{
-    command::bundle_ffi::*, error::ContextErrorSource, pipeline::CreateShaderModuleError,
-    present::SurfaceError,
-};
+use wgc::{command::bundle_ffi::*, error::ContextErrorSource, pipeline::CreateShaderModuleError};
 use wgt::WasmNotSendSync;
 
 #[derive(Clone)]
