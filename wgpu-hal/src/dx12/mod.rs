@@ -1261,6 +1261,9 @@ impl crate::Surface for Surface {
                             dcomp_state.visual.SetContent(&swap_chain1).map_err(|_| {
                                 crate::SurfaceError::Other("IDCompositionVisual::SetContent")
                             })?;
+                            dcomp_state.device.Commit().map_err(|_| {
+                                crate::SurfaceError::Other("IDCompositionDevice::Commit")
+                            })?;
                         }
                     }
                     SurfaceTarget::Visual(visual) => {
@@ -1435,29 +1438,6 @@ impl crate::Queue for Queue {
         }
         .ok()
         .into_device_result("Present")?;
-
-        if let SurfaceTarget::VisualFromWndHandle { dcomp_state, .. } = &surface.target {
-            let dcomp_state = dcomp_state.read();
-            let dcomp_state = dcomp_state.as_ref().unwrap();
-            unsafe {
-                if dcomp_state
-                    .device
-                    .CheckDeviceState()
-                    .map_err(|_| {
-                        crate::SurfaceError::Other("IDCompositionDevice::CheckDeviceState")
-                    })?
-                    .into()
-                {
-                    profiling::scope!("IDCompositionDevice::Commit");
-                    dcomp_state
-                        .device
-                        .Commit()
-                        .map_err(|_| crate::SurfaceError::Other("IDCompositionDevice::Commit"))?;
-                } else {
-                    return Err(crate::SurfaceError::Lost);
-                }
-            }
-        }
 
         Ok(())
     }
