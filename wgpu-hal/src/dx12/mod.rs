@@ -1150,7 +1150,9 @@ impl crate::Surface for Surface {
                     Flags: flags.0 as u32,
                 };
                 let swap_chain1 = match self.target {
-                    SurfaceTarget::Visual(_) | SurfaceTarget::SwapChainPanel(_) => {
+                    SurfaceTarget::Visual(_)
+                    | SurfaceTarget::VisualFromWndHandle { .. }
+                    | SurfaceTarget::SwapChainPanel(_) => {
                         profiling::scope!("IDXGIFactory2::CreateSwapChainForComposition");
                         unsafe {
                             self.factory.CreateSwapChainForComposition(
@@ -1160,61 +1162,6 @@ impl crate::Surface for Surface {
                             )
                         }
                     }
-                    SurfaceTarget::VisualFromWndHandle {
-                        handle,
-                        ref dcomp_state,
-                    } => unsafe {
-                        macro_rules! call {
-                            ($name:literal, $e:expr) => {{
-                                profiling::scope!($name);
-                                ($e).map_err(|_| crate::SurfaceError::Other($name))?
-                            }};
-                        }
-
-                        let mut d3d11_device = None;
-                        call!(
-                            "Direct3D11on12::D3D11On12CreateDevice",
-                            Direct3D11on12::D3D11On12CreateDevice(
-                                &device.raw,
-                                Direct3D11::D3D11_CREATE_DEVICE_BGRA_SUPPORT.0,
-                                None,
-                                None,
-                                0,
-                                Some(&mut d3d11_device),
-                                None,
-                                None,
-                            )
-                        );
-                        let d3d11_device = d3d11_device.unwrap();
-                        let dxgi_device: Dxgi::IDXGIDevice =
-                            call!("IDXGIDevice::QueryInterface", d3d11_device.cast());
-                        let dcomp_device: DirectComposition::IDCompositionDevice = call!(
-                            "DirectComposition::DCompositionCreateDevice",
-                            DirectComposition::DCompositionCreateDevice(&dxgi_device)
-                        );
-                        let target = call!(
-                            "IDCompositionDevice::CreateTargetForHwnd",
-                            dcomp_device.CreateTargetForHwnd(handle, false)
-                        );
-                        let visual = call!(
-                            "IDCompositionDevice::CreateVisual",
-                            dcomp_device.CreateVisual()
-                        );
-                        call!("IDCompositionTarget::SetRoot", target.SetRoot(&visual));
-
-                        *dcomp_state.write() = Some(DCompState {
-                            visual,
-                            device: dcomp_device,
-                            _target: target,
-                        });
-
-                        profiling::scope!("IDXGIFactory2::CreateSwapChainForComposition");
-                        self.factory.CreateSwapChainForComposition(
-                            &device.present_queue,
-                            &desc,
-                            None,
-                        )
-                    },
                     SurfaceTarget::SurfaceHandle(handle) => {
                         profiling::scope!(
                             "IDXGIFactoryMedia::CreateSwapChainForCompositionSurfaceHandle"
@@ -1252,20 +1199,70 @@ impl crate::Surface for Surface {
 
                 match &self.target {
                     SurfaceTarget::WndHandle(_) | SurfaceTarget::SurfaceHandle(_) => {}
-                    SurfaceTarget::VisualFromWndHandle { dcomp_state, .. } => {
-                        let dcomp_state = dcomp_state.read();
-                        let dcomp_state = dcomp_state
-                            .as_ref()
-                            .expect("dcomp_state was initialized above");
-                        unsafe {
-                            dcomp_state.visual.SetContent(&swap_chain1).map_err(|_| {
-                                crate::SurfaceError::Other("IDCompositionVisual::SetContent")
-                            })?;
-                            dcomp_state.device.Commit().map_err(|_| {
-                                crate::SurfaceError::Other("IDCompositionDevice::Commit")
-                            })?;
+                    SurfaceTarget::VisualFromWndHandle {
+                        handle,
+                        dcomp_state,
+                    } => unsafe {
+                        macro_rules! call {
+                            ($name:literal, $e:expr) => {{
+                                profiling::scope!($name);
+                                ($e).map_err(|_| crate::SurfaceError::Other($name))?
+                            }};
                         }
-                    }
+
+                        // Initialize the window-linked DirectComposition state
+                        // if we haven't done so already.
+                        let mut dcomp_state = dcomp_state.write();
+                        let dcomp_state = match dcomp_state.as_mut() {
+                            Some(s) => s,
+                            None => {
+                                let mut d3d11_device = None;
+                                call!(
+                                    "Direct3D11on12::D3D11On12CreateDevice",
+                                    Direct3D11on12::D3D11On12CreateDevice(
+                                        &device.raw,
+                                        Direct3D11::D3D11_CREATE_DEVICE_BGRA_SUPPORT.0,
+                                        None,
+                                        None,
+                                        0,
+                                        Some(&mut d3d11_device),
+                                        None,
+                                        None,
+                                    )
+                                );
+                                let d3d11_device = d3d11_device.unwrap();
+                                let dxgi_device: Dxgi::IDXGIDevice =
+                                    call!("IDXGIDevice::QueryInterface", d3d11_device.cast());
+                                let dcomp_device: DirectComposition::IDCompositionDevice = call!(
+                                    "DirectComposition::DCompositionCreateDevice",
+                                    DirectComposition::DCompositionCreateDevice(&dxgi_device)
+                                );
+                                let target = call!(
+                                    "IDCompositionDevice::CreateTargetForHwnd",
+                                    dcomp_device.CreateTargetForHwnd(*handle, false)
+                                );
+                                let visual = call!(
+                                    "IDCompositionDevice::CreateVisual",
+                                    dcomp_device.CreateVisual()
+                                );
+                                call!("IDCompositionTarget::SetRoot", target.SetRoot(&visual));
+
+                                dcomp_state.insert(DCompState {
+                                    visual,
+                                    device: dcomp_device,
+                                    _target: target,
+                                })
+                            }
+                        };
+
+                        // Set the new swap chain as the content for the backing visual
+                        // and commit the changes to the composition visual tree.
+                        call!(
+                            "IDCompositionVisual::SetContent",
+                            dcomp_state.visual.SetContent(&swap_chain1)
+                        );
+                        call!("IDCompositionDevice::Commit", dcomp_state.device.Commit());
+                    },
                     SurfaceTarget::Visual(visual) => {
                         if let Err(err) = unsafe { visual.SetContent(&swap_chain1) } {
                             log::error!("Unable to SetContent: {err}");
