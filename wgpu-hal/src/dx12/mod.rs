@@ -1432,12 +1432,10 @@ impl crate::Queue for Queue {
             m => unreachable!("Cannot make surface with present mode {m:?}"),
         };
 
-        unsafe {
-            profiling::scope!("IDXGISwapchain3::Present");
-            sc.raw.Present(interval, flags)
-        }
-        .ok()
-        .into_device_result("Present")?;
+        profiling::scope!("IDXGISwapchain3::Present");
+        unsafe { sc.raw.Present(interval, flags) }
+            .ok()
+            .into_device_result("Present")?;
 
         Ok(())
     }
