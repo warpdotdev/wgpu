@@ -43,6 +43,7 @@ pub fn initialize_instance(backends: wgpu::Backends, force_fxc: bool) -> Instanc
         backend_options: wgpu::BackendOptions {
             dx12: wgpu::Dx12BackendOptions {
                 shader_compiler: dx12_shader_compiler,
+                use_dcomp: false,
             },
             gl: wgpu::GlBackendOptions { gles_minor_version },
         },

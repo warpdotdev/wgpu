@@ -78,6 +78,7 @@ impl Instance {
                         .dx12
                         .shader_compiler
                         .clone(),
+                    dx12_use_dcomp: instance_desc.backend_options.dx12.use_dcomp,
                     gles_minor_version: instance_desc.backend_options.gl.gles_minor_version,
                 };
 

@@ -243,6 +243,7 @@ impl<A: hal::Api> Example<A> {
                 dxc_path: "dxcompiler.dll".to_string(),
                 dxil_path: "dxil.dll".to_string(),
             },
+            dx12_use_dcomp: false,
             gles_minor_version: wgt::Gles3MinorVersion::default(),
         };
         let instance = unsafe { A::Instance::init(&instance_desc)? };

@@ -1752,6 +1752,7 @@ pub struct InstanceDescriptor<'a> {
     pub name: &'a str,
     pub flags: wgt::InstanceFlags,
     pub dx12_shader_compiler: wgt::Dx12Compiler,
+    pub dx12_use_dcomp: bool,
     pub gles_minor_version: wgt::Gles3MinorVersion,
 }
 
