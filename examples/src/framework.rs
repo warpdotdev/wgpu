@@ -551,7 +551,7 @@ impl<E: Example + wgpu::WasmNotSendSync> From<ExampleTestParams<E>>
                         height: params.height,
                         desired_maximum_frame_latency: 2,
                         present_mode: wgpu::PresentMode::Fifo,
-                        alpha_mode: wgpu::CompositeAlphaMode::Opaque,
+                        alpha_mode: wgpu::CompositeAlphaMode::Auto,
                         view_formats: vec![format],
                     },
                     &ctx.adapter,
